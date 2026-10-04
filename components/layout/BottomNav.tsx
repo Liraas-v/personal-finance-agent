@@ -1,13 +1,13 @@
 'use client'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { BarChart2, CreditCard, Target, Lightbulb, MessageSquare } from 'lucide-react'
+import { BarChart2, CreditCard, Target, MessageSquare } from 'lucide-react'
+import { MoreSheet } from '@/components/layout/MoreSheet'
 
 const TABS = [
   { label: 'Dashboard', href: '/dashboard', icon: BarChart2 },
   { label: 'Transações', href: '/transacoes', icon: CreditCard },
   { label: 'Metas', href: '/metas', icon: Target },
-  { label: 'Insights', href: '/insights', icon: Lightbulb },
   { label: 'Chat', href: '/chat', icon: MessageSquare },
 ]
 
@@ -31,6 +31,7 @@ export function BottomNav() {
           </Link>
         )
       })}
+      <MoreSheet />
     </nav>
   )
 }
