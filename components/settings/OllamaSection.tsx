@@ -83,7 +83,7 @@ export function OllamaSection() {
             <SelectTrigger className="bg-muted border-border-strong text-foreground">
               <SelectValue />
             </SelectTrigger>
-            <SelectContent className="bg-muted border-border-strong">
+            <SelectContent className="border-border-strong">
               {models.map((m) => (
                 <SelectItem key={m} value={m} className="text-foreground">{m}</SelectItem>
               ))}

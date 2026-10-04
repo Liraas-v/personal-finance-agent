@@ -64,7 +64,7 @@ export function MetasSection() {
           <SelectTrigger className="bg-muted border-border-strong text-foreground">
             <SelectValue />
           </SelectTrigger>
-          <SelectContent className="bg-muted border-border-strong">
+          <SelectContent className="border-border-strong">
             {MOEDAS.map(({ value, label }) => (
               <SelectItem key={value} value={value} className="text-foreground">{label}</SelectItem>
             ))}

@@ -174,7 +174,7 @@ export function ChatPanel() {
               : 'Pergunte algo sobre suas finanças... (Enter para enviar)'
           }
           rows={2}
-          className="flex-1 resize-none bg-muted border border-border-strong rounded-lg px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary/40 transition-colors"
+          className="flex-1 resize-none bg-muted border border-border-strong rounded-lg px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary transition-colors"
         />
         {sttSupported && (
           <button

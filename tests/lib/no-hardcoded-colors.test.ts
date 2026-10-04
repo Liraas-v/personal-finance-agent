@@ -19,6 +19,10 @@ const RULES: { nome: string; re: RegExp }[] = [
   { nome: 'branco/preto fixo', re: /\b(text|bg|border)-(white|black)\b/ },
   { nome: 'raio acima de 8px', re: /rounded-(xl|2xl|3xl)\b/ },
   { nome: 'texto abaixo de 12px', re: /text-\[(9|10|11)px\]|fontSize:\s*(9|10|11)\b/ },
+  // revisão final: foco por teclado precisa ser visível nos dois temas
+  { nome: 'foco com borda translúcida (quase invisível no claro)', re: /focus(-visible)?:border-primary\/\d+/ },
+  // --accent (hover/foco do item) vale o mesmo que --muted: lista em bg-muted esconde o item em destaque
+  { nome: 'SelectContent em bg-muted (item em destaque some)', re: /SelectContent[^>]*bg-muted/ },
 ]
 
 function walk(dir: string): string[] {
