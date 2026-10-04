@@ -22,7 +22,7 @@ export function DemoBanner() {
           o Finance Agent usa Ollama 100% offline.{' '}
         </span>
         <a
-          href="https://github.com/Liraas-v/FINANCE-AGENT"
+          href="https://github.com/Liraas-v/personal-finance-agent"
           target="_blank"
           rel="noopener noreferrer"
           className="text-foreground underline underline-offset-2 hover:text-primary"

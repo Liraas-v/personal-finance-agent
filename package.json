@@ -1,7 +1,21 @@
 {
-    "name": "finance-agent",
-    "version": "0.1.0",
+    "name": "personal-finance-agent",
+    "version": "0.2.0",
     "private": true,
+    "description": "Agente financeiro pessoal local-first: registre gastos por texto, voz ou foto de recibo, com IA (Ollama) categorizando e gerando insights.",
+    "license": "MIT",
+    "author": "Henrique Lira",
+    "homepage": "https://finance-agent-blue.vercel.app",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Liraas-v/personal-finance-agent.git"
+    },
+    "bugs": {
+        "url": "https://github.com/Liraas-v/personal-finance-agent/issues"
+    },
+    "engines": {
+        "node": ">=20.9"
+    },
     "scripts": {
         "dev": "next dev",
         "build": "next build",
@@ -9,7 +23,8 @@
         "lint": "eslint",
         "typecheck": "tsc --noEmit",
         "test": "vitest",
-        "test:run": "vitest run"
+        "test:run": "vitest run",
+        "screenshots": "node scripts/capture-screenshots.mjs"
     },
     "dependencies": {
         "@base-ui/react": "^1.4.1",
