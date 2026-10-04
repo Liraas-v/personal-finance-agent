@@ -72,7 +72,7 @@ export function UploadReceipt() {
               className={`flex flex-col items-center justify-center h-56 rounded-lg border-2 border-dashed cursor-pointer transition-colors ${
                 isDragging
                   ? 'border-primary/40 bg-primary/5'
-                  : 'border-border-strong hover:border-border-strong bg-card'
+                  : 'border-border-strong hover:border-primary bg-card'
               }`}
             >
               <input
@@ -121,7 +121,7 @@ export function UploadReceipt() {
           >
             <div className="flex items-center gap-2 mb-4 p-3 bg-positive/10 border border-positive/20 rounded-lg">
               <CheckCircle2 size={16} className="text-positive" />
-              <span className="text-sm text-positive">Dados extraídos com sucesso. Revise e confirme.</span>
+              <span className="text-sm text-foreground">Dados extraídos com sucesso. Revise e confirme.</span>
               <button onClick={reset} className="ml-auto text-muted-foreground hover:text-foreground-secondary">
                 <X size={14} />
               </button>

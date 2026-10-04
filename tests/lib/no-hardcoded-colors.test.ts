@@ -23,6 +23,8 @@ const RULES: { nome: string; re: RegExp }[] = [
   { nome: 'foco com borda translúcida (quase invisível no claro)', re: /focus(-visible)?:border-primary\/\d+/ },
   // --accent (hover/foco do item) vale o mesmo que --muted: lista em bg-muted esconde o item em destaque
   { nome: 'SelectContent em bg-muted (item em destaque some)', re: /SelectContent[^>]*bg-muted/ },
+  // de-para igual no hover (a migração por sed pode ter gerado): o usuário passa o mouse e nada muda
+  { nome: 'hover sem efeito', re: /(?<![\w:-])((?:bg|text|border)-[a-z-]+)(?=[\s"'`])[^"'`]*\bhover:\1(?![\w/-])/ },
 ]
 
 function walk(dir: string): string[] {

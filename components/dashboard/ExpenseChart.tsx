@@ -66,10 +66,10 @@ export function ExpenseChart() {
   const data = buildMonthlyData(transactions)
 
   return (
-    <div className="rounded-lg border border-border bg-card p-4">
+    <div className="flex h-full flex-col rounded-lg border border-border bg-card p-4">
       <h3 className="mb-4 text-sm font-semibold text-foreground">Gastos vs Receitas</h3>
       {data.length === 0 ? (
-        <div className="flex h-[180px] items-center justify-center text-sm text-muted-foreground">
+        <div className="flex min-h-[180px] flex-1 items-center justify-center text-sm text-muted-foreground">
           Sem dados para exibir
         </div>
       ) : (
@@ -85,7 +85,8 @@ export function ExpenseChart() {
             </li>
           ))}
         </ul>
-        <ResponsiveContainer width="100%" height={180}>
+        <div className="min-h-[180px] flex-1">
+        <ResponsiveContainer width="100%" height="100%">
           <BarChart data={data} barGap={4}>
             <CartesianGrid stroke={colors.grid} vertical={false} />
             <XAxis dataKey="mes" tick={{ fill: colors.axis, fontSize: 12 }} axisLine={false} tickLine={false} />
@@ -95,6 +96,7 @@ export function ExpenseChart() {
             <Bar dataKey="receitas" name="Receitas" fill={colors.primary} radius={[3, 3, 0, 0]} />
           </BarChart>
         </ResponsiveContainer>
+        </div>
         </>
       )}
     </div>

@@ -80,7 +80,7 @@ export function DadosSection() {
       <div className="space-y-2">
         <button
           onClick={exportJson}
-          className="w-full flex items-center justify-between px-4 py-3 bg-muted rounded-lg text-sm text-foreground-secondary hover:bg-muted transition-colors"
+          className="w-full flex items-center justify-between px-4 py-3 bg-muted rounded-lg text-sm text-foreground-secondary hover:bg-border transition-colors"
         >
           <span className="flex items-center gap-2"><Download size={14} />Exportar backup JSON</span>
           <span className="text-xs text-primary">↓ Download</span>
@@ -88,7 +88,7 @@ export function DadosSection() {
 
         <button
           onClick={() => fileRef.current?.click()}
-          className="w-full flex items-center justify-between px-4 py-3 bg-muted rounded-lg text-sm text-foreground-secondary hover:bg-muted transition-colors"
+          className="w-full flex items-center justify-between px-4 py-3 bg-muted rounded-lg text-sm text-foreground-secondary hover:bg-border transition-colors"
         >
           <span className="flex items-center gap-2"><Upload size={14} />Importar backup</span>
           <span className="text-xs text-primary">↑ Upload</span>

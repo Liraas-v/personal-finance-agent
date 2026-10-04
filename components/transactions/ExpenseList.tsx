@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useTransactions } from '@/hooks/useTransactions'
 import { useFinanceStore } from '@/lib/store'
 import { formatCurrency } from '@/lib/currency'
-import { Badge } from '@/components/ui/badge'
+import { formatDateBR } from '@/lib/dates'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { ExpenseForm } from './ExpenseForm'
 import type { Transaction } from '@/types'
@@ -38,20 +38,18 @@ function TransactionRow({
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2">
           <span className="text-sm text-foreground truncate">{t.descricao}</span>
-          <Badge variant="outline" className="text-xs py-0 text-muted-foreground border-border-strong gap-0.5">
-            {ORIGEM_ICON[t.origem]}
-          </Badge>
+          <span className="inline-flex items-center gap-1 text-xs text-muted-foreground">{ORIGEM_ICON[t.origem]}{t.origem}</span>
         </div>
         <div className="flex items-center gap-2 mt-0.5">
           <span className="text-xs text-muted-foreground">{t.categoria}</span>
           <span className="text-xs text-muted-foreground">·</span>
           <span className="hidden sm:inline text-xs text-muted-foreground">{t.pagamento}</span>
           <span className="hidden sm:inline text-xs text-muted-foreground">·</span>
-          <span className="text-xs text-muted-foreground">{t.data}</span>
+          <span className="text-xs text-muted-foreground tabular-nums">{formatDateBR(t.data)}</span>
         </div>
       </div>
       <span
-        className={`text-sm font-semibold tabular-nums shrink-0 ${
+        className={`font-mono text-sm font-medium tabular-nums shrink-0 ${
           t.tipo === 'gasto' ? 'text-negative' : 'text-positive'
         }`}
       >
@@ -60,14 +58,14 @@ function TransactionRow({
       <button
         onClick={onEdit}
         aria-label={`Editar ${t.descricao}`}
-        className="opacity-0 group-hover:opacity-100 transition-opacity text-muted-foreground hover:text-primary p-1"
+        className="opacity-0 group-hover:opacity-100 focus-visible:opacity-100 [@media(hover:none)]:opacity-100 transition-opacity rounded-md text-muted-foreground hover:text-primary p-1"
       >
         <Pencil size={14} />
       </button>
       <button
         onClick={onDelete}
         aria-label={`Remover ${t.descricao}`}
-        className="opacity-0 group-hover:opacity-100 transition-opacity text-muted-foreground hover:text-negative p-1"
+        className="opacity-0 group-hover:opacity-100 focus-visible:opacity-100 [@media(hover:none)]:opacity-100 transition-opacity rounded-md text-muted-foreground hover:text-negative p-1"
       >
         <Trash2 size={14} />
       </button>
