@@ -7,7 +7,7 @@ export function DemoBanner() {
   if (!isDemoMode) return null
 
   return (
-    <div className="fixed top-0 left-0 right-0 z-50 h-9 bg-violet-950/60 border-b border-violet-800/40 px-2 sm:px-4 text-xs text-violet-200 flex items-center gap-1.5 sm:gap-2 justify-center text-center">
+    <div className="fixed left-0 right-0 top-0 z-50 flex h-8 items-center justify-center gap-1.5 border-b border-border bg-muted px-2 text-center text-xs text-muted-foreground sm:gap-2 sm:px-4">
       <Info size={13} className="shrink-0" />
       <span data-testid="demo-banner-text" className="truncate">
         {/* Abaixo de sm: texto curto, para caber sem corte em telas de 320px */}
@@ -25,7 +25,7 @@ export function DemoBanner() {
           href="https://github.com/Liraas-v/FINANCE-AGENT"
           target="_blank"
           rel="noopener noreferrer"
-          className="underline hover:text-violet-100"
+          className="text-foreground underline underline-offset-2 hover:text-primary"
         >
           Ver no GitHub
         </a>

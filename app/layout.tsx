@@ -41,8 +41,8 @@ export default function RootLayout({
           <Providers>
             <DemoBanner />
             <Header />
-            {/* pt-[88px] = 52px Header + 36px DemoBanner (h-9) stacked in demo mode; pt-[52px] = Header alone */}
-            <main className={`${isDemoMode ? 'pt-[88px]' : 'pt-[52px]'} pb-16 sm:pb-0`}>{children}</main>
+            {/* pt-[84px] = 52px Header + 32px DemoBanner (h-8) stacked in demo mode; pt-[52px] = Header alone */}
+            <main className={`${isDemoMode ? 'pt-[84px]' : 'pt-[52px]'} pb-16 sm:pb-0`}>{children}</main>
             <BottomNav />
             <VoiceRecorder />
             <ServiceWorkerRegistration />

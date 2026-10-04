@@ -15,7 +15,7 @@ export function BottomNav() {
   const pathname = usePathname()
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-40 flex sm:hidden h-14 bg-[#0a0a12] border-t border-[#1e1e2e]">
+    <nav className="fixed bottom-0 left-0 right-0 z-40 flex sm:hidden h-14 border-t border-border bg-card">
       {TABS.map(({ label, href, icon: Icon }) => {
         const active = pathname.startsWith(href)
         return (
@@ -23,11 +23,11 @@ export function BottomNav() {
             key={href}
             href={href}
             className={`flex-1 flex flex-col items-center justify-center gap-0.5 transition-colors ${
-              active ? 'text-violet-400' : 'text-slate-600 hover:text-slate-400'
+              active ? 'text-primary' : 'text-muted-foreground hover:text-foreground'
             }`}
           >
             <Icon size={18} strokeWidth={active ? 2.5 : 1.8} />
-            <span className="text-[9px] font-medium">{label}</span>
+            <span className="text-xs font-medium">{label}</span>
           </Link>
         )
       })}
