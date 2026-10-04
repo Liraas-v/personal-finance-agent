@@ -20,6 +20,7 @@ const page = await context.newPage()
 
 for (const name of PAGES) {
   await page.goto(`${BASE_URL}/${name}`, { waitUntil: 'networkidle' })
+  await page.waitForTimeout(1500) // deixa as animações dos gráficos terminarem
   await page.screenshot({ path: `${OUT_DIR}/${name}.png`, fullPage: true })
   console.log(`✓ ${name} (${THEME})`)
 }
