@@ -4,8 +4,8 @@
   "description": "Agente financeiro pessoal local e offline",
   "start_url": "/dashboard",
   "display": "standalone",
-  "background_color": "#0a0a0f",
-  "theme_color": "#7c3aed",
+  "background_color": "#111214",
+  "theme_color": "#111214",
   "icons": [
     {
       "src": "/icon.svg",
