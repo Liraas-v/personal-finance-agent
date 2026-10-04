@@ -40,3 +40,16 @@ export function readChartColors(el: Element): ChartColors {
 export function categoryColor(colors: ChartColors, index: number): string {
   return colors.categories[Math.min(Math.max(index, 0), colors.categories.length - 1)]
 }
+
+// O donut só tem 6 tons distintos: as categorias além disso viram uma fatia "Outras",
+// em vez de repetir a mesma cor em fatias diferentes.
+export function groupTopCategories(
+  entries: { name: string; value: number }[],
+  max: number,
+): { name: string; value: number }[] {
+  const sorted = [...entries].sort((a, b) => b.value - a.value)
+  if (sorted.length <= max) return sorted
+  const top = sorted.slice(0, max - 1)
+  const rest = sorted.slice(max - 1).reduce((sum, e) => sum + e.value, 0)
+  return [...top, { name: 'Outras', value: rest }]
+}

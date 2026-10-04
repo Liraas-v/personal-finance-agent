@@ -2,15 +2,16 @@
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Legend } from 'recharts'
 import { useTransactions } from '@/hooks/useTransactions'
 import { useChartColors } from '@/hooks/useChartColors'
-import { categoryColor } from '@/lib/chartColors'
+import { categoryColor, groupTopCategories } from '@/lib/chartColors'
 
 export function CategoryChart() {
   const { porCategoria } = useTransactions()
   const colors = useChartColors()
 
-  const data = Object.entries(porCategoria)
-    .sort(([, a], [, b]) => b - a)
-    .map(([name, value]) => ({ name, value }))
+  const data = groupTopCategories(
+    Object.entries(porCategoria).map(([name, value]) => ({ name, value })),
+    colors.categories.length,
+  )
 
   return (
     <div className="rounded-lg border border-border bg-card p-4">
