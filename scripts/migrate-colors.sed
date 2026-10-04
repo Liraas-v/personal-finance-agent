@@ -13,6 +13,7 @@ s/text-slate-(500|600|700)\b/text-muted-foreground/g
 
 # Acento (violeta/índigo/azul -> primary)
 s/hover:bg-(violet|indigo|purple)-[0-9]+/hover:bg-primary\/90/g
+s/bg-(violet|indigo|purple)-(800|900|950)(\/[0-9]+)?/bg-primary\/10/g
 s/bg-(violet|indigo|purple)-[0-9]+(\/[0-9]+)?/bg-primary\2/g
 s/text-(violet|indigo|purple|sky|blue|cyan)-[0-9]+/text-primary/g
 s/border-(violet|indigo|purple|sky|blue|cyan)-[0-9]+(\/[0-9]+)?/border-primary\/40/g
