@@ -147,7 +147,7 @@ The suite covers pure functions, repositories, the `AIProvider`, API routes and 
 
 - [x] Visual redesign with light and dark themes
 - [x] CI and bilingual documentation
-- [ ] Per-screen UX rework (goals, transactions, chat, insights, mobile)
+- [x] Per-screen UX rework (goals, transactions, chat, insights, mobile)
 - [ ] Custom categories
 - [ ] End-to-end tests
 

@@ -147,7 +147,7 @@ A suíte cobre funções puras, repositórios, `AIProvider`, rotas de API e comp
 
 - [x] Redesign visual com tema claro e escuro
 - [x] CI e documentação bilíngue
-- [ ] Reorganização de UX por tela (metas, transações, chat, insights, mobile)
+- [x] Reorganização de UX por tela (metas, transações, chat, insights, mobile)
 - [ ] Categorias personalizadas
 - [ ] Testes end-to-end
 
