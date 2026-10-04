@@ -12,6 +12,7 @@ import { useShallow } from 'zustand/react/shallow'
 import { useTransactions } from '@/hooks/useTransactions'
 import { ALL_CATEGORIES } from '@/lib/categories'
 import { formatCurrency } from '@/lib/currency'
+import { limitStatus } from '@/lib/limits'
 import { cn } from '@/lib/utils'
 
 const configRepository = getConfigRepository()
@@ -24,22 +25,24 @@ export function GoalsPanel() {
   const { saldo, porCategoria } = useTransactions()
   const moeda = config?.moeda ?? 'BRL'
 
-  const [editingMeta, setEditingMeta] = useState(false)
-  const [metaValue, setMetaValue] = useState(config?.metaEconomia?.toString() ?? '0')
+  // Rascunho da meta: null = não está editando. O valor inicial é lido do config no momento do clique,
+  // então não importa quando o config (assíncrono) chegou.
+  const [metaDraft, setMetaDraft] = useState<string | null>(null)
+  const editingMeta = metaDraft !== null
   const [editingCat, setEditingCat] = useState<string | null>(null)
   const [catLimit, setCatLimit] = useState('')
   const [saving, setSaving] = useState(false)
 
   const saveMeta = async () => {
-    if (!config) return
-    const v = parseFloat(metaValue)
+    if (!config || metaDraft === null) return
+    const v = parseFloat(metaDraft)
     if (isNaN(v)) return
     setSaving(true)
     try {
       const updated = await configRepository.update({ metaEconomia: v })
       setConfig(updated)
       toast.success('Meta de economia atualizada')
-      setEditingMeta(false)
+      setMetaDraft(null)
     } catch {
       toast.error('Erro ao salvar meta de economia')
     } finally {
@@ -66,7 +69,7 @@ export function GoalsPanel() {
   }
 
   const metaEconomia = config?.metaEconomia ?? 0
-  const metaPct = metaEconomia > 0 ? (saldo / metaEconomia) * 100 : 0
+  const metaPct = metaEconomia > 0 ? Math.max(0, (saldo / metaEconomia) * 100) : 0
   const limits = config?.limitesPorCategoria ?? {}
   const fmt = (v: number) => formatCurrency(v, moeda)
 
@@ -85,7 +88,7 @@ export function GoalsPanel() {
           <Button
             variant="ghost"
             size="sm"
-            onClick={() => setEditingMeta(!editingMeta)}
+            onClick={() => setMetaDraft(editingMeta ? null : String(config?.metaEconomia ?? 0))}
             className="text-xs text-muted-foreground h-7"
           >
             Editar
@@ -95,8 +98,8 @@ export function GoalsPanel() {
         {editingMeta && (
           <div className="flex gap-2 mb-4">
             <Input
-              value={metaValue}
-              onChange={(e) => setMetaValue(e.target.value)}
+              value={metaDraft ?? ''}
+              onChange={(e) => setMetaDraft(e.target.value)}
               placeholder="Ex: 2000"
               className="h-8 text-sm bg-muted border-border-strong text-foreground w-40"
             />
@@ -108,8 +111,8 @@ export function GoalsPanel() {
 
         <div className="space-y-2">
           <div className="flex justify-between text-xs text-muted-foreground">
-            <span>Economizado: {fmt(Math.max(0, saldo))}</span>
-            <span>Meta: {fmt(metaEconomia)}</span>
+            <span>Economizado: <span className="font-mono tabular-nums">{fmt(Math.max(0, saldo))}</span></span>
+            <span>Meta: <span className="font-mono tabular-nums">{fmt(metaEconomia)}</span></span>
           </div>
           <Progress value={Math.max(0, Math.min(100, metaPct))} className="h-2" />
           <div className="flex items-center gap-1.5 text-xs">
@@ -126,32 +129,35 @@ export function GoalsPanel() {
 
       <div className="bg-card border border-border rounded-lg p-5">
         <h3 className="text-sm font-semibold text-foreground mb-4">Limites por Categoria</h3>
-        <div className="space-y-4">
+        <ul className="space-y-3">
           {ALL_CATEGORIES.filter((c) => c !== 'Outros').map((cat, i) => {
             const spent = porCategoria[cat] ?? 0
             const limit = limits[cat] ?? 0
-            const pct = limit > 0 ? (spent / limit) * 100 : 0
-            const isOver = pct > 100
-            const isWarn = pct > 80 && pct <= 100
+            const { status, pct } = limitStatus(spent, limit)
+            const tone =
+              status === 'over' ? 'text-negative' : status === 'warning' ? 'text-warning' : 'text-foreground-secondary'
 
             return (
-              <motion.div
+              <motion.li
                 key={cat}
+                data-categoria={cat}
+                data-status={status}
                 initial={{ opacity: 0, x: -8 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: i * 0.04 }}
                 className={cn(
-                  'rounded-lg transition-colors',
-                  isOver && 'border border-negative/40 bg-negative/5 px-2 py-1',
-                  isWarn && !isOver && 'border border-warning/30 bg-warning/5 px-2 py-1'
+                  'rounded-lg border px-3 py-2',
+                  status === 'over'
+                    ? 'border-negative/40 bg-negative/5'
+                    : status === 'warning'
+                    ? 'border-warning/30 bg-warning/5'
+                    : 'border-border'
                 )}
               >
-                <div className="flex items-center justify-between mb-1.5">
-                  <span className={`text-xs ${isOver ? 'text-negative' : isWarn ? 'text-warning' : 'text-foreground-secondary'}`}>
-                    {cat}
-                  </span>
-                  <div className="flex items-center gap-2">
-                    <span className={`text-xs ${isOver ? 'text-negative' : isWarn ? 'text-warning' : 'text-muted-foreground'}`}>
+                <div className="flex items-center justify-between gap-3">
+                  <span className={`text-sm ${tone}`}>{cat}</span>
+                  <div className="flex items-center gap-3">
+                    <span className={`font-mono text-xs tabular-nums ${status === 'none' ? 'text-muted-foreground' : tone}`}>
                       {fmt(spent)}{limit > 0 ? ` / ${fmt(limit)}` : ''}
                     </span>
                     {editingCat === cat ? (
@@ -160,37 +166,36 @@ export function GoalsPanel() {
                           value={catLimit}
                           onChange={(e) => setCatLimit(e.target.value)}
                           placeholder="Limite"
-                          className="h-6 text-xs bg-muted border-border-strong w-20 sm:w-24"
+                          aria-label={`Limite de ${cat}`}
+                          className="h-7 w-24 border-border-strong bg-muted text-xs"
                         />
-                        <Button
-                          size="sm"
-                          className="h-6 text-xs px-2"
-                          onClick={() => saveCatLimit(cat)}
-                          disabled={saving}
-                        >
+                        <Button size="sm" className="h-7 px-2 text-xs" onClick={() => saveCatLimit(cat)} disabled={saving}>
                           OK
                         </Button>
                       </div>
                     ) : (
                       <button
-                        onClick={() => { setEditingCat(cat); setCatLimit(limit?.toString() ?? '') }}
-                        className="text-xs text-muted-foreground hover:text-foreground-secondary"
+                        onClick={() => { setEditingCat(cat); setCatLimit(limit > 0 ? String(limit) : '') }}
+                        aria-label={limit > 0 ? `Editar limite de ${cat}` : `Definir limite de ${cat}`}
+                        className="rounded-md border border-border-strong px-2 py-1 text-xs text-foreground-secondary transition-colors hover:bg-muted hover:text-foreground"
                       >
-                        definir
+                        {limit > 0 ? 'Editar' : 'Definir limite'}
                       </button>
                     )}
                   </div>
                 </div>
-                {limit > 0 && (
+                {status !== 'none' && (
                   <Progress
-                    value={Math.min(100, pct)}
-                    className={`h-1.5 ${isOver ? '[&>div]:bg-negative' : isWarn ? '[&>div]:bg-warning' : '[&>div]:bg-primary'}`}
+                    value={pct}
+                    className={`mt-2 h-1.5 ${
+                      status === 'over' ? '[&>div]:bg-negative' : status === 'warning' ? '[&>div]:bg-warning' : '[&>div]:bg-primary'
+                    }`}
                   />
                 )}
-              </motion.div>
+              </motion.li>
             )
           })}
-        </div>
+        </ul>
       </div>
     </div>
   )
