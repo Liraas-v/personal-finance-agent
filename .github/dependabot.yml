@@ -8,6 +8,15 @@ updates:
     groups:
       minor-and-patch:
         update-types: [minor, patch]
+    ignore:
+      # eslint-config-next ainda depende de plugins (import, jsx-a11y) que só suportam o ESLint 9.
+      # Rever quando o eslint-config-next declarar suporte ao ESLint 10.
+      - dependency-name: eslint
+        update-types: ["version-update:semver-major"]
+      # A partir da 6.1 o plugin pede @babel/core 8, e shadcn e eslint-config-next ainda usam o Babel 7
+      # (ERESOLVE). Rever quando essas dependências migrarem para o Babel 8.
+      - dependency-name: "@vitejs/plugin-react"
+        update-types: ["version-update:semver-minor", "version-update:semver-patch"]
   - package-ecosystem: github-actions
     directory: /
     schedule:
