@@ -8,9 +8,9 @@ type DotColor = 'green' | 'amber' | 'red'
 
 function Dot({ color }: { color: DotColor }) {
   const cls: Record<DotColor, string> = {
-    green: 'bg-green-400',
-    amber: 'bg-amber-400',
-    red: 'bg-red-500',
+    green: 'bg-positive',
+    amber: 'bg-warning',
+    red: 'bg-negative',
   }
   return <span className={`inline-block w-2 h-2 rounded-full shrink-0 ${cls[color]}`} />
 }
@@ -42,21 +42,21 @@ export function StatusSection() {
   ]
 
   return (
-    <div className="rounded-xl border border-[#1e1e2e] bg-[#0f0f17] p-5 space-y-3">
+    <div className="rounded-lg border border-border bg-card p-5 space-y-3">
       <div className="flex items-center gap-2">
-        <Wifi size={16} className="text-violet-400" />
-        <h3 className="font-semibold text-slate-200">Status do Sistema</h3>
+        <Wifi size={16} className="text-primary" />
+        <h3 className="font-semibold text-foreground">Status do Sistema</h3>
       </div>
 
       <div className="space-y-2">
         {rows.map(({ label, color, detail }) => (
           <div
             key={label}
-            className="flex items-center gap-3 bg-[#1e1e2e] rounded-lg px-4 py-2.5"
+            className="flex items-center gap-3 bg-muted rounded-lg px-4 py-2.5"
           >
             <Dot color={color} />
-            <span className="text-sm text-slate-300 flex-1">{label}</span>
-            <span className="text-xs text-slate-500 text-right">{detail}</span>
+            <span className="text-sm text-foreground-secondary flex-1">{label}</span>
+            <span className="text-xs text-muted-foreground text-right">{detail}</span>
           </div>
         ))}
       </div>

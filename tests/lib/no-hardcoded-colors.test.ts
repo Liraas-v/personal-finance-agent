@@ -7,15 +7,7 @@ const SCAN_DIRS = ['app', 'components']
 const EXEMPT = new Set(['app/globals.css'])
 
 // Arquivos ainda não migrados. Cada task de migração remove os seus daqui; ao final a lista fica vazia.
-const PENDING = new Set<string>([
-  'app/settings/page.tsx',
-  'components/export/ExportDialog.tsx',
-  'components/layout/DateRangePicker.tsx',
-  'components/settings/DadosSection.tsx',
-  'components/settings/MetasSection.tsx',
-  'components/settings/OllamaSection.tsx',
-  'components/settings/StatusSection.tsx',
-])
+const PENDING = new Set<string>([])
 
 const PALETTE =
   '(slate|gray|zinc|neutral|stone|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose)'

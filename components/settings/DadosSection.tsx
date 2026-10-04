@@ -71,59 +71,59 @@ export function DadosSection() {
   }
 
   return (
-    <div className="rounded-xl border border-[#1e1e2e] bg-[#0f0f17] p-5 space-y-3">
+    <div className="rounded-lg border border-border bg-card p-5 space-y-3">
       <div className="flex items-center gap-2">
-        <Database size={16} className="text-violet-400" />
-        <h3 className="font-semibold text-slate-200">Gestão de Dados</h3>
+        <Database size={16} className="text-primary" />
+        <h3 className="font-semibold text-foreground">Gestão de Dados</h3>
       </div>
 
       <div className="space-y-2">
         <button
           onClick={exportJson}
-          className="w-full flex items-center justify-between px-4 py-3 bg-[#1e1e2e] rounded-lg text-sm text-slate-300 hover:bg-[#252535] transition-colors"
+          className="w-full flex items-center justify-between px-4 py-3 bg-muted rounded-lg text-sm text-foreground-secondary hover:bg-muted transition-colors"
         >
           <span className="flex items-center gap-2"><Download size={14} />Exportar backup JSON</span>
-          <span className="text-xs text-blue-400">↓ Download</span>
+          <span className="text-xs text-primary">↓ Download</span>
         </button>
 
         <button
           onClick={() => fileRef.current?.click()}
-          className="w-full flex items-center justify-between px-4 py-3 bg-[#1e1e2e] rounded-lg text-sm text-slate-300 hover:bg-[#252535] transition-colors"
+          className="w-full flex items-center justify-between px-4 py-3 bg-muted rounded-lg text-sm text-foreground-secondary hover:bg-muted transition-colors"
         >
           <span className="flex items-center gap-2"><Upload size={14} />Importar backup</span>
-          <span className="text-xs text-blue-400">↑ Upload</span>
+          <span className="text-xs text-primary">↑ Upload</span>
         </button>
         <input ref={fileRef} type="file" accept=".json" className="hidden" onChange={importJson} />
 
         <button
           onClick={() => setConfirmOpen(true)}
-          className="w-full flex items-center justify-between px-4 py-3 bg-[#1e1e2e] rounded-lg text-sm text-red-400 hover:bg-[#2a1a1a] transition-colors"
+          className="w-full flex items-center justify-between px-4 py-3 bg-muted rounded-lg text-sm text-negative hover:bg-negative/10 transition-colors"
         >
           <span className="flex items-center gap-2"><Trash2 size={14} />Limpar todas as transações</span>
-          <span className="text-xs text-red-500">⚠ Danger</span>
+          <span className="text-xs text-negative">⚠ Danger</span>
         </button>
       </div>
 
       <Dialog open={confirmOpen} onOpenChange={setConfirmOpen}>
-        <DialogContent className="bg-[#0f0f17] border-[#1e1e2e]">
+        <DialogContent className="bg-card border-border">
           <DialogHeader>
-            <DialogTitle className="text-slate-200">Limpar todas as transações?</DialogTitle>
+            <DialogTitle className="text-foreground">Limpar todas as transações?</DialogTitle>
           </DialogHeader>
-          <p className="text-sm text-slate-400">
+          <p className="text-sm text-foreground-secondary">
             Esta ação não pode ser desfeita. Todas as transações serão removidas permanentemente.
           </p>
           <DialogFooter>
             <Button
               variant="outline"
               onClick={() => setConfirmOpen(false)}
-              className="border-[#2a2a3e] text-slate-400"
+              className="border-border-strong text-foreground-secondary"
             >
               Cancelar
             </Button>
             <Button
               onClick={clearAll}
               disabled={clearing}
-              className="bg-red-700 hover:bg-red-600 text-white"
+              className="bg-negative hover:bg-negative/90 text-primary-foreground"
             >
               {clearing ? 'Limpando...' : 'Sim, limpar tudo'}
             </Button>

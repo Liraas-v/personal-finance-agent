@@ -52,7 +52,7 @@ export function DateRangePicker() {
         <Button
           variant="outline"
           size="sm"
-          className="h-7 gap-1.5 bg-[#1e1e2e] border-[#2a2a3e] text-slate-400 hover:text-slate-200 text-xs"
+          className="h-7 gap-1.5 bg-muted border-border-strong text-foreground-secondary hover:text-foreground text-xs"
         >
           <Calendar size={12} />
           {label}
@@ -60,14 +60,14 @@ export function DateRangePicker() {
         </Button>
       </PopoverTrigger>
       <PopoverContent
-        className="w-64 bg-[#0f0f17] border-[#1e1e2e] p-3"
+        className="w-64 bg-card border-border p-3"
         align="end"
       >
-        <p className="text-xs text-slate-500 uppercase tracking-wide mb-2">Período</p>
+        <p className="text-xs text-muted-foreground uppercase tracking-wide mb-2">Período</p>
         <div className="flex flex-col gap-1 mb-3">
           <button
             onClick={() => { setDateRange(null); setOpen(false) }}
-            className="text-left text-xs px-2 py-1.5 rounded hover:bg-[#1e1e2e] text-slate-300"
+            className="text-left text-xs px-2 py-1.5 rounded hover:bg-muted text-foreground-secondary"
           >
             Todos os períodos
           </button>
@@ -75,25 +75,25 @@ export function DateRangePicker() {
             <button
               key={p.label}
               onClick={() => { setDateRange({ from: p.from, to: p.to }); setOpen(false) }}
-              className="text-left text-xs px-2 py-1.5 rounded hover:bg-[#1e1e2e] text-slate-300"
+              className="text-left text-xs px-2 py-1.5 rounded hover:bg-muted text-foreground-secondary"
             >
               {p.label}
             </button>
           ))}
         </div>
-        <p className="text-xs text-slate-500 uppercase tracking-wide mb-2">Personalizado</p>
+        <p className="text-xs text-muted-foreground uppercase tracking-wide mb-2">Personalizado</p>
         <div className="flex flex-col gap-2">
           <input
             type="date"
             value={customFrom}
             onChange={(e) => setCustomFrom(e.target.value)}
-            className="text-xs bg-[#1e1e2e] border border-[#2a2a3e] rounded px-2 py-1 text-slate-300"
+            className="text-xs bg-muted border border-border-strong rounded px-2 py-1 text-foreground-secondary"
           />
           <input
             type="date"
             value={customTo}
             onChange={(e) => setCustomTo(e.target.value)}
-            className="text-xs bg-[#1e1e2e] border border-[#2a2a3e] rounded px-2 py-1 text-slate-300"
+            className="text-xs bg-muted border border-border-strong rounded px-2 py-1 text-foreground-secondary"
           />
           <Button
             size="sm"
