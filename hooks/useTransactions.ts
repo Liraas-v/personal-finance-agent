@@ -1,5 +1,6 @@
 // hooks/useTransactions.ts
-import { useCallback } from 'react'
+import { useCallback, useMemo } from 'react'
+import { sortByDateDesc } from '@/lib/transactions'
 import { toast } from 'sonner'
 import { useFinanceStore } from '@/lib/store'
 import { useShallow } from 'zustand/react/shallow'
@@ -20,11 +21,16 @@ export function useTransactions() {
     }))
   )
 
-  const filteredTransactions = dateRange
-    ? transactions.filter(
-        (t) => t.data >= dateRange.from && t.data <= dateRange.to
-      )
-    : transactions
+  // useMemo mantém a mesma referência entre renderizações (hooks que dependem da lista não recriam callbacks à toa)
+  const filteredTransactions = useMemo(
+    () =>
+      sortByDateDesc(
+        dateRange
+          ? transactions.filter((t) => t.data >= dateRange.from && t.data <= dateRange.to)
+          : transactions
+      ),
+    [transactions, dateRange]
+  )
 
   const checkCategoryLimit = useCallback(
     (categoria: string, valorNovo: number) => {
