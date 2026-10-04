@@ -134,7 +134,7 @@ export function ChatPanel() {
                   <span className="text-xs text-primary">falando...</span>
                   <button
                     onClick={stop}
-                    className="ml-auto text-xs text-primary border border-primary/40 rounded px-1.5 py-0.5 hover:text-primary transition-colors"
+                    className="ml-auto text-xs text-primary border border-primary/40 rounded px-1.5 py-0.5 hover:bg-primary/10 transition-colors"
                   >
                     ■ parar
                   </button>

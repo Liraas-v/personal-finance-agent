@@ -102,7 +102,7 @@ export function VoiceRecorder() {
           whileTap={{ scale: 0.92 }}
           className={`relative w-14 h-14 rounded-full flex items-center justify-center shadow-md transition-colors ${
             isListening
-              ? 'bg-negative hover:bg-negative'
+              ? 'bg-negative hover:bg-negative/90'
               : 'bg-primary hover:bg-primary/90'
           }`}
         >

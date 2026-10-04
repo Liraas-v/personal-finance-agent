@@ -30,7 +30,7 @@ export function ThemeSelect({ showLabels = false }: { showLabels?: boolean }) {
             aria-label={label}
             title={label}
             className={`inline-flex h-7 items-center gap-1.5 rounded px-2 text-xs transition-colors ${
-              active ? 'bg-card text-foreground' : 'text-muted-foreground hover:text-foreground'
+              active ? 'bg-card text-foreground ring-1 ring-border-strong' : 'text-muted-foreground hover:text-foreground'
             }`}
           >
             <Icon size={14} />

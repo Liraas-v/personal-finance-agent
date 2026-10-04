@@ -70,8 +70,8 @@ export function ExpenseForm({ defaultValues, origem = 'manual', transaction, onD
             className={`flex-1 py-1.5 rounded-lg text-xs font-medium transition-colors ${
               tipo === t
                 ? t === 'gasto'
-                  ? 'bg-negative/20 text-negative border border-negative/30'
-                  : 'bg-positive/20 text-positive border border-positive/30'
+                  ? 'bg-negative/15 text-foreground border border-negative/60'
+                  : 'bg-positive/15 text-foreground border border-positive/60'
                 : 'bg-muted text-muted-foreground border border-transparent'
             }`}
           >
