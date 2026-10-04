@@ -1,4 +1,5 @@
 'use client'
+import { useSyncExternalStore } from 'react'
 import { Wifi } from 'lucide-react'
 import { useOllamaStatus } from '@/hooks/useOllamaStatus'
 
@@ -15,11 +16,14 @@ function Dot({ color }: { color: DotColor }) {
   return <span className={`inline-block w-2 h-2 rounded-full shrink-0 ${cls[color]}`} />
 }
 
+const subscribe = () => () => {}
+const hasSpeech = () => 'SpeechRecognition' in window || 'webkitSpeechRecognition' in window
+// servidor e hidratação: false; depois da montagem: valor real do navegador
+const useSpeechAvailable = () => useSyncExternalStore(subscribe, hasSpeech, () => false)
+
 export function StatusSection() {
   const { status, loading } = useOllamaStatus()
-  const speechAvailable =
-    typeof window !== 'undefined' &&
-    ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window)
+  const speechAvailable = useSpeechAvailable()
 
   const iaLabel = isDemoMode ? 'IA (Groq)' : 'Ollama'
   const iaColor: DotColor = loading ? 'amber' : status.online ? 'green' : 'red'
