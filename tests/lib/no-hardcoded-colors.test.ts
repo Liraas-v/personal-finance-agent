@@ -12,7 +12,6 @@ const PENDING = new Set<string>([
   'app/insights/page.tsx',
   'app/ocr/page.tsx',
   'app/settings/page.tsx',
-  'app/transacoes/page.tsx',
   'components/chat/ChatPanel.tsx',
   'components/chat/ChatSidebar.tsx',
   'components/export/ExportDialog.tsx',
@@ -24,8 +23,6 @@ const PENDING = new Set<string>([
   'components/settings/MetasSection.tsx',
   'components/settings/OllamaSection.tsx',
   'components/settings/StatusSection.tsx',
-  'components/transactions/ExpenseForm.tsx',
-  'components/transactions/ExpenseList.tsx',
   'components/voice/VoiceRecorder.tsx',
 ])
 

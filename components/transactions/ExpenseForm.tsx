@@ -55,9 +55,9 @@ export function ExpenseForm({ defaultValues, origem = 'manual', transaction, onD
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       onSubmit={handleSubmit}
-      className="bg-[#0f0f17] border border-[#1e1e2e] rounded-xl p-5 space-y-4"
+      className="bg-card border border-border rounded-lg p-5 space-y-4"
     >
-      <h3 className="text-sm font-semibold text-slate-200">
+      <h3 className="text-sm font-semibold text-foreground">
         {isEditing ? 'Editar transação' : 'Nova transação'}
       </h3>
 
@@ -70,9 +70,9 @@ export function ExpenseForm({ defaultValues, origem = 'manual', transaction, onD
             className={`flex-1 py-1.5 rounded-lg text-xs font-medium transition-colors ${
               tipo === t
                 ? t === 'gasto'
-                  ? 'bg-rose-500/20 text-rose-300 border border-rose-500/30'
-                  : 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
-                : 'bg-[#1e1e2e] text-slate-500 border border-transparent'
+                  ? 'bg-negative/20 text-negative border border-negative/30'
+                  : 'bg-positive/20 text-positive border border-positive/30'
+                : 'bg-muted text-muted-foreground border border-transparent'
             }`}
           >
             {t === 'gasto' ? '− Gasto' : '+ Receita'}
@@ -82,22 +82,22 @@ export function ExpenseForm({ defaultValues, origem = 'manual', transaction, onD
 
       <div className="grid grid-cols-2 gap-3">
         <div>
-          <Label className="text-xs text-slate-500">Descrição</Label>
+          <Label className="text-xs text-muted-foreground">Descrição</Label>
           <Input
             value={descricao}
             onChange={(e) => setDescricao(e.target.value)}
             placeholder="iFood, Salário..."
-            className="mt-1 bg-[#1e1e2e] border-[#2a2a3e] text-slate-100 text-sm h-8"
+            className="mt-1 bg-muted border-border-strong text-foreground text-sm h-8"
             required
           />
         </div>
         <div>
-          <Label className="text-xs text-slate-500">Valor (R$)</Label>
+          <Label className="text-xs text-muted-foreground">Valor (R$)</Label>
           <Input
             value={valor}
             onChange={(e) => setValor(e.target.value)}
             placeholder="0,00"
-            className="mt-1 bg-[#1e1e2e] border-[#2a2a3e] text-slate-100 text-sm h-8"
+            className="mt-1 bg-muted border-border-strong text-foreground text-sm h-8"
             required
           />
         </div>
@@ -105,21 +105,21 @@ export function ExpenseForm({ defaultValues, origem = 'manual', transaction, onD
 
       <div className="grid grid-cols-3 gap-3">
         <div>
-          <Label className="text-xs text-slate-500">Categoria</Label>
+          <Label className="text-xs text-muted-foreground">Categoria</Label>
           <select
             value={categoria}
             onChange={(e) => setCategoria(e.target.value)}
-            className="mt-1 w-full h-8 bg-[#1e1e2e] border border-[#2a2a3e] rounded-md text-slate-100 text-xs px-2"
+            className="mt-1 w-full h-8 bg-muted border border-border-strong rounded-md text-foreground text-xs px-2"
           >
             {ALL_CATEGORIES.map((c) => <option key={c}>{c}</option>)}
           </select>
         </div>
         <div>
-          <Label className="text-xs text-slate-500">Pagamento</Label>
+          <Label className="text-xs text-muted-foreground">Pagamento</Label>
           <select
             value={pagamento}
             onChange={(e) => setPagamento(e.target.value as FormaPagamento)}
-            className="mt-1 w-full h-8 bg-[#1e1e2e] border border-[#2a2a3e] rounded-md text-slate-100 text-xs px-2"
+            className="mt-1 w-full h-8 bg-muted border border-border-strong rounded-md text-foreground text-xs px-2"
           >
             {(['crédito','débito','pix','dinheiro','parcelado'] as FormaPagamento[]).map((p) => (
               <option key={p}>{p}</option>
@@ -127,12 +127,12 @@ export function ExpenseForm({ defaultValues, origem = 'manual', transaction, onD
           </select>
         </div>
         <div>
-          <Label className="text-xs text-slate-500">Data</Label>
+          <Label className="text-xs text-muted-foreground">Data</Label>
           <Input
             type="date"
             value={data}
             onChange={(e) => setData(e.target.value)}
-            className="mt-1 bg-[#1e1e2e] border-[#2a2a3e] text-slate-100 text-xs h-8"
+            className="mt-1 bg-muted border-border-strong text-foreground text-xs h-8"
           />
         </div>
       </div>
@@ -141,7 +141,7 @@ export function ExpenseForm({ defaultValues, origem = 'manual', transaction, onD
         type="submit"
         disabled={loading}
         size="sm"
-        className="w-full bg-violet-600 hover:bg-violet-700 text-white gap-1.5"
+        className="w-full bg-primary hover:bg-primary/90 text-primary-foreground gap-1.5"
       >
         {isEditing ? <Save size={14} /> : <PlusCircle size={14} />}
         {loading ? 'Salvando...' : isEditing ? 'Salvar alterações' : 'Adicionar'}
