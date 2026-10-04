@@ -22,8 +22,6 @@ const PENDING = new Set<string>([
   'components/dashboard/InsightBanner.tsx',
   'components/dashboard/RecentTransactions.tsx',
   'components/export/ExportDialog.tsx',
-  'components/ui/dialog.tsx',
-  'components/ui/sheet.tsx',
   'components/goals/GoalsPanel.tsx',
   'components/insights/InsightCard.tsx',
   'components/layout/BottomNav.tsx',
