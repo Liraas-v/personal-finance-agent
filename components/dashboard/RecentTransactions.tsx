@@ -9,26 +9,26 @@ export function RecentTransactions() {
   const recent = transactions.slice(0, 6)
 
   return (
-    <div className="bg-[#0f0f17] border border-[#1e1e2e] rounded-xl p-4">
-      <h3 className="text-sm font-semibold text-slate-200 mb-3">Últimas Transações</h3>
+    <div className="rounded-lg border border-border bg-card p-4">
+      <h3 className="mb-3 text-sm font-semibold text-foreground">Últimas Transações</h3>
       {recent.length === 0 ? (
-        <p className="text-sm text-slate-600 py-4 text-center">Nenhuma transação ainda</p>
+        <p className="py-4 text-center text-sm text-muted-foreground">Nenhuma transação ainda</p>
       ) : (
-        <div className="space-y-3">
+        <ul className="divide-y divide-border">
           {recent.map((t) => (
-            <div key={t.id} className="flex items-center justify-between">
+            <li key={t.id} className="flex items-center justify-between py-2.5 first:pt-0 last:pb-0">
               <div>
-                <p className="text-sm text-slate-200">{t.descricao}</p>
-                <p className="text-xs text-slate-600">{t.categoria} · {t.origem}</p>
+                <p className="text-sm text-foreground">{t.descricao}</p>
+                <p className="text-xs text-muted-foreground">{t.categoria} · {t.origem}</p>
               </div>
-              <span className={`text-sm font-semibold tabular-nums ${
-                t.tipo === 'gasto' ? 'text-rose-400' : 'text-emerald-400'
+              <span className={`font-mono text-sm font-medium tabular-nums ${
+                t.tipo === 'gasto' ? 'text-negative' : 'text-positive'
               }`}>
                 {t.tipo === 'gasto' ? '−' : '+'}{formatCurrency(t.valor, moeda)}
               </span>
-            </div>
+            </li>
           ))}
-        </div>
+        </ul>
       )}
     </div>
   )
