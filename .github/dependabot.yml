@@ -17,6 +17,10 @@ updates:
       # (ERESOLVE). Rever quando essas dependências migrarem para o Babel 8.
       - dependency-name: "@vitejs/plugin-react"
         update-types: ["version-update:semver-minor", "version-update:semver-patch"]
+      # Os tipos acompanham o Node do CI e dos engines (22 / >=20.9): tipos de um Node mais novo
+      # deixariam passar APIs que não existem no runtime. Subir junto com o Node do CI.
+      - dependency-name: "@types/node"
+        update-types: ["version-update:semver-major"]
   - package-ecosystem: github-actions
     directory: /
     schedule:
