@@ -8,14 +8,10 @@ const EXEMPT = new Set(['app/globals.css'])
 
 // Arquivos ainda não migrados. Cada task de migração remove os seus daqui; ao final a lista fica vazia.
 const PENDING = new Set<string>([
-  'app/chat/page.tsx',
   'app/insights/page.tsx',
   'app/ocr/page.tsx',
   'app/settings/page.tsx',
-  'components/chat/ChatPanel.tsx',
-  'components/chat/ChatSidebar.tsx',
   'components/export/ExportDialog.tsx',
-  'components/goals/GoalsPanel.tsx',
   'components/insights/InsightCard.tsx',
   'components/layout/DateRangePicker.tsx',
   'components/ocr/UploadReceipt.tsx',
