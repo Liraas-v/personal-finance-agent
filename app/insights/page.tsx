@@ -3,15 +3,19 @@ import { useEffect } from 'react'
 import { Lightbulb, RefreshCw } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { InsightCard } from '@/components/insights/InsightCard'
+import { InsightsState } from '@/components/insights/InsightsState'
 import { useInsights } from '@/hooks/useInsights'
+import { useFinanceStore } from '@/lib/store'
 
 export default function InsightsPage() {
-  const { insights, loading, generate } = useInsights()
+  const { insights, loading, status, generate } = useInsights()
+  const hasTransactions = useFinanceStore((s) => s.transactions.length > 0)
 
+  // As transações chegam de forma assíncrona: gerar só quando existirem (e de novo se passarem a existir).
   useEffect(() => {
-    generate()
+    if (hasTransactions) generate()
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [hasTransactions])
 
   return (
     <div className="p-4 sm:p-6 max-w-[800px] mx-auto">
@@ -41,10 +45,11 @@ export default function InsightsPage() {
       )}
 
       {!loading && insights.length === 0 && (
-        <div className="text-center py-16 text-muted-foreground">
-          <Lightbulb size={32} className="mx-auto mb-3 opacity-30" />
-          <p className="text-sm">Nenhum dado para analisar ainda.</p>
-          <p className="text-xs mt-1">Adicione transações e clique em Regenerar.</p>
+        <div className="py-16 text-center">
+          <Lightbulb size={32} className="mx-auto mb-3 text-muted-foreground opacity-30" />
+          <div className="flex justify-center">
+            <InsightsState status={status} hasTransactions={hasTransactions} onRetry={generate} />
+          </div>
         </div>
       )}
 

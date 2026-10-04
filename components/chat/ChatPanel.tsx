@@ -6,6 +6,7 @@ import { useSpeech } from '@/hooks/useSpeech'
 import { useVoice } from '@/hooks/useVoice'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
+import { ChatSuggestions } from '@/components/chat/ChatSuggestions'
 
 export function ChatPanel() {
   const { messages, loading, contextEnabled, toggleContext, sendMessage, clearChat } = useChat()
@@ -92,11 +93,14 @@ export function ChatPanel() {
         {messages.length === 0 && (
           <div className="flex flex-col items-center justify-center h-full text-muted-foreground gap-2 py-16">
             <p className="text-sm">Olá! Como posso ajudar com suas finanças?</p>
-            <p className="text-xs opacity-70">
+            <p className="text-xs text-muted-foreground">
               {contextEnabled
                 ? 'Contexto financeiro ativo — vou analisar seus dados reais.'
                 : 'Contexto desativado — respondendo de forma genérica.'}
             </p>
+          <div className="mt-4">
+            <ChatSuggestions onSelect={(text) => sendMessage(text)} />
+          </div>
           </div>
         )}
 
@@ -176,6 +180,23 @@ export function ChatPanel() {
           rows={2}
           className="flex-1 resize-none bg-muted border border-border-strong rounded-lg px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary transition-colors"
         />
+        {ttsSupported && (
+          <button
+            type="button"
+            onClick={() => setJarvisEnabled((v) => !v)}
+            aria-pressed={jarvisEnabled}
+            aria-label="Responder por voz"
+            title="Responder por voz"
+            className={cn(
+              'self-end flex h-10 w-10 items-center justify-center rounded-lg border transition-colors',
+              jarvisEnabled
+                ? 'border-primary/60 bg-primary/10 text-primary'
+                : 'border-border-strong bg-muted text-muted-foreground hover:text-foreground-secondary'
+            )}
+          >
+            <Volume2 size={15} />
+          </button>
+        )}
         {sttSupported && (
           <button
             onClick={toggleMic}
@@ -199,34 +220,6 @@ export function ChatPanel() {
           <Send size={16} />
         </Button>
       </div>
-
-      {/* Jarvis mode toggle */}
-      {ttsSupported && (
-        <div className="mt-3 shrink-0">
-          <button
-            onClick={() => setJarvisEnabled((v) => !v)}
-            className={cn(
-              'w-full flex items-center justify-between px-4 py-2.5 rounded-lg border text-xs transition-colors',
-              jarvisEnabled
-                ? 'bg-primary/10 border-primary/40 text-primary'
-                : 'bg-transparent border-border-strong text-muted-foreground hover:text-foreground-secondary'
-            )}
-          >
-            <span className="flex items-center gap-2">
-              <Volume2 size={14} />
-              <span>Responder por voz automaticamente</span>
-            </span>
-            <span
-              className={cn(
-                'px-2 py-0.5 rounded-full text-xs font-medium',
-                jarvisEnabled ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'
-              )}
-            >
-              {jarvisEnabled ? 'ON' : 'OFF'}
-            </span>
-          </button>
-        </div>
-      )}
     </div>
   )
 }

@@ -1,16 +1,20 @@
 'use client'
 import { useEffect, useState } from 'react'
 import { useInsights } from '@/hooks/useInsights'
+import { useFinanceStore } from '@/lib/store'
+import { InsightsState } from '@/components/insights/InsightsState'
 import { motion, AnimatePresence } from 'framer-motion'
 
 export function InsightBanner() {
-  const { insights, generate, loading } = useInsights()
+  const { insights, generate, loading, status } = useInsights()
+  const hasTransactions = useFinanceStore((s) => s.transactions.length > 0)
   const [current, setCurrent] = useState(0)
 
+  // As transações chegam de forma assíncrona: gerar só quando existirem (e de novo se passarem a existir).
   useEffect(() => {
-    generate()
+    if (hasTransactions) generate()
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [hasTransactions])
 
   useEffect(() => {
     if (insights.length <= 1) return
@@ -37,7 +41,7 @@ export function InsightBanner() {
             {insights[current].texto}
           </motion.p>
         ) : (
-          <p className="text-sm text-muted-foreground">Adicione transações para gerar insights.</p>
+          <InsightsState status={status} hasTransactions={hasTransactions} onRetry={generate} />
         )}
       </AnimatePresence>
     </section>

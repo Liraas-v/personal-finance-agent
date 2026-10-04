@@ -5,15 +5,21 @@ import { useFinanceStore } from '@/lib/store'
 import type { Insight, TransactionSummary } from '@/types'
 import { v4 as uuidv4 } from 'uuid'
 
+export type InsightsStatus = 'idle' | 'loading' | 'ready' | 'empty' | 'error'
+
 export function useInsights() {
   const [insights, setInsights] = useState<Insight[]>([])
-  const [loading, setLoading] = useState(false)
+  const [status, setStatus] = useState<InsightsStatus>('idle')
   const { transactions, totalGastos, totalReceitas, saldo, porCategoria } = useTransactions()
   const moeda = useFinanceStore((s) => s.config?.moeda ?? 'BRL')
 
   const generate = useCallback(async () => {
-    if (transactions.length === 0) return
-    setLoading(true)
+    if (transactions.length === 0) {
+      setInsights([])
+      setStatus('idle')
+      return
+    }
+    setStatus('loading')
 
     const dates = transactions.map((t) => t.data).sort()
     const summary: TransactionSummary = {
@@ -31,6 +37,7 @@ export function useInsights() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ summary }),
       })
+      if (!res.ok) throw new Error(`HTTP ${res.status}`)
       const data = await res.json()
       const texts: string[] = data.insights ?? []
 
@@ -42,17 +49,12 @@ export function useInsights() {
           generatedAt: new Date().toISOString(),
         }))
       )
+      setStatus(texts.length > 0 ? 'ready' : 'empty')
     } catch {
-      setInsights([{
-        id: uuidv4(),
-        texto: 'IA não está disponível no momento.',
-        tipo: 'alerta',
-        generatedAt: new Date().toISOString(),
-      }])
-    } finally {
-      setLoading(false)
+      setInsights([])
+      setStatus('error')
     }
   }, [transactions, totalGastos, totalReceitas, saldo, porCategoria, moeda])
 
-  return { insights, loading, generate }
+  return { insights, status, loading: status === 'loading', generate }
 }

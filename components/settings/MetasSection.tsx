@@ -20,11 +20,10 @@ const MOEDAS: { value: Config['moeda']; label: string }[] = [
   { value: 'EUR', label: 'EUR — Euro' },
 ]
 
-export function MetasSection() {
-  const config = useFinanceStore((s) => s.config)
+function MetasForm({ config }: { config: Config }) {
   const updateConfig = useFinanceStore((s) => s.updateConfig)
-  const [meta, setMeta] = useState(String(config?.metaEconomia ?? 0))
-  const [moeda, setMoeda] = useState<Config['moeda']>(config?.moeda ?? 'BRL')
+  const [meta, setMeta] = useState(String(config.metaEconomia))
+  const [moeda, setMoeda] = useState<Config['moeda']>(config.moeda)
   const [saving, setSaving] = useState(false)
 
   async function save() {
@@ -82,4 +81,22 @@ export function MetasSection() {
       </Button>
     </div>
   )
+}
+
+// O config chega de forma assíncrona: o formulário só monta quando ele existe, para que os campos
+// nasçam com o valor real (e não com 0).
+export function MetasSection() {
+  const config = useFinanceStore((s) => s.config)
+
+  if (!config) {
+    return (
+      <div className="space-y-4 rounded-lg border border-border bg-card p-5" aria-busy="true">
+        <div className="h-5 w-48 animate-pulse rounded bg-muted" />
+        <div className="h-9 animate-pulse rounded bg-muted" />
+        <div className="h-9 animate-pulse rounded bg-muted" />
+      </div>
+    )
+  }
+
+  return <MetasForm config={config} />
 }

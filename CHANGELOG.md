@@ -4,14 +4,21 @@ Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/).
 
 ## [Unreleased]
 
+### Adicionado
+- Menu "Mais" na navegação mobile (Insights, OCR, Configurações e tema).
+- Sugestões de pergunta no estado vazio do chat.
+
 ### Alterado
+- Chat em coluna única; a resposta por voz vira um botão de ícone no campo de mensagem.
+- Insights com mensagens coerentes com os dados e botão "Tentar de novo" quando a IA não responde.
 - Transações listadas da mais recente para a mais antiga; "Últimas transações" do dashboard passa a mostrar as mais recentes.
 - Datas em `dd/mm/aaaa`, origem em texto e ações de editar/remover acessíveis por teclado e toque.
 - Metas: todas as categorias com a mesma estrutura e ação "Definir limite".
 - Gráfico de gastos vs receitas ocupa a altura do card.
 
 ### Corrigido
-- Meta de economia carregada corretamente ao abrir a tela de metas.
+- Insights pediam para "adicionar transações" mesmo havendo dados: a geração agora espera as transações carregarem.
+- Meta de economia real em Configurações (mostrava 0) e carregada corretamente ao abrir a tela de metas.
 - Hovers sem efeito e contraste dos botões ativos do formulário, do seletor de tema e do trilho das barras de progresso.
 
 ## [0.2.0] - 2026-10-04
