@@ -15,35 +15,35 @@ export function ChatSidebar() {
 
   return (
     <aside className="hidden sm:flex flex-col gap-3 w-[240px] shrink-0">
-      <h3 className="text-xs font-semibold text-slate-500 uppercase tracking-wider px-1">
+      <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider px-1">
         Resumo Financeiro
       </h3>
 
       <div className="space-y-2">
-        <div className="bg-[#0f0f17] border border-[#1e1e2e] rounded-xl p-4">
-          <div className="text-xs text-slate-500 mb-1">Gastos</div>
-          <div className="text-base font-bold text-rose-400">{fmt(totalGastos)}</div>
+        <div className="bg-card border border-border rounded-lg p-4">
+          <div className="text-xs text-muted-foreground mb-1">Gastos</div>
+          <div className="text-base font-bold text-negative">{fmt(totalGastos)}</div>
         </div>
-        <div className="bg-[#0f0f17] border border-[#1e1e2e] rounded-xl p-4">
-          <div className="text-xs text-slate-500 mb-1">Receitas</div>
-          <div className="text-base font-bold text-emerald-400">{fmt(totalReceitas)}</div>
+        <div className="bg-card border border-border rounded-lg p-4">
+          <div className="text-xs text-muted-foreground mb-1">Receitas</div>
+          <div className="text-base font-bold text-positive">{fmt(totalReceitas)}</div>
         </div>
-        <div className="bg-[#0f0f17] border border-[#1e1e2e] rounded-xl p-4">
-          <div className="text-xs text-slate-500 mb-1">Saldo</div>
-          <div className={`text-base font-bold ${saldo >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
+        <div className="bg-card border border-border rounded-lg p-4">
+          <div className="text-xs text-muted-foreground mb-1">Saldo</div>
+          <div className={`text-base font-bold ${saldo >= 0 ? 'text-positive' : 'text-negative'}`}>
             {fmt(saldo)}
           </div>
         </div>
       </div>
 
       {topCategorias.length > 0 && (
-        <div className="bg-[#0f0f17] border border-[#1e1e2e] rounded-xl p-4">
-          <div className="text-xs text-slate-500 mb-3">Top categorias</div>
+        <div className="bg-card border border-border rounded-lg p-4">
+          <div className="text-xs text-muted-foreground mb-3">Top categorias</div>
           <div className="space-y-2">
             {topCategorias.map(([cat, val]) => (
               <div key={cat} className="flex items-center justify-between">
-                <span className="text-xs text-slate-400 truncate pr-2">{cat}</span>
-                <span className="text-xs font-medium text-slate-300 shrink-0">{fmt(val)}</span>
+                <span className="text-xs text-foreground-secondary truncate pr-2">{cat}</span>
+                <span className="text-xs font-medium text-foreground-secondary shrink-0">{fmt(val)}</span>
               </div>
             ))}
           </div>

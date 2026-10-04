@@ -63,3 +63,6 @@ HANDOFF.md
 
 # configuração local do Claude Code (pode conter caminhos locais)
 /.claude/
+
+# screenshots temporários de verificação visual
+/.tmp/

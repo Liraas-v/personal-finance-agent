@@ -41,32 +41,32 @@ export function MetasSection() {
   }
 
   return (
-    <div className="rounded-xl border border-[#1e1e2e] bg-[#0f0f17] p-5 space-y-4">
+    <div className="rounded-lg border border-border bg-card p-5 space-y-4">
       <div className="flex items-center gap-2">
-        <Target size={16} className="text-violet-400" />
-        <h3 className="font-semibold text-slate-200">Metas e Preferências</h3>
+        <Target size={16} className="text-primary" />
+        <h3 className="font-semibold text-foreground">Metas e Preferências</h3>
       </div>
 
       <div className="space-y-1.5">
-        <Label className="text-slate-400 text-xs">Meta de economia mensal</Label>
+        <Label className="text-foreground-secondary text-xs">Meta de economia mensal</Label>
         <Input
           type="number"
           min="0"
           value={meta}
           onChange={(e) => setMeta(e.target.value)}
-          className="bg-[#1e1e2e] border-[#2a2a3e] text-slate-200"
+          className="bg-muted border-border-strong text-foreground"
         />
       </div>
 
       <div className="space-y-1.5">
-        <Label className="text-slate-400 text-xs">Moeda</Label>
+        <Label className="text-foreground-secondary text-xs">Moeda</Label>
         <Select value={moeda} onValueChange={(v) => setMoeda(v as Config['moeda'])}>
-          <SelectTrigger className="bg-[#1e1e2e] border-[#2a2a3e] text-slate-200">
+          <SelectTrigger className="bg-muted border-border-strong text-foreground">
             <SelectValue />
           </SelectTrigger>
-          <SelectContent className="bg-[#1e1e2e] border-[#2a2a3e]">
+          <SelectContent className="border-border-strong">
             {MOEDAS.map(({ value, label }) => (
-              <SelectItem key={value} value={value} className="text-slate-200">{label}</SelectItem>
+              <SelectItem key={value} value={value} className="text-foreground">{label}</SelectItem>
             ))}
           </SelectContent>
         </Select>
@@ -76,7 +76,7 @@ export function MetasSection() {
         size="sm"
         onClick={save}
         disabled={saving}
-        className="w-full text-xs bg-violet-700 hover:bg-violet-600"
+        className="w-full text-xs bg-primary hover:bg-primary/90"
       >
         {saving ? 'Salvando...' : 'Salvar preferências'}
       </Button>

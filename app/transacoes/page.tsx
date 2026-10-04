@@ -6,13 +6,13 @@ export default function TransacoesPage() {
   return (
     <div className="p-4 sm:p-6 max-w-[1400px] mx-auto">
       <div className="flex items-center justify-between mb-4 sm:hidden">
-        <h1 className="text-sm font-semibold text-slate-400 uppercase tracking-wider">Transações</h1>
+        <h1 className="text-sm font-semibold text-foreground-secondary uppercase tracking-wider">Transações</h1>
         <ExportDialog />
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-[380px_1fr] gap-6">
         <div>
           <div className="hidden sm:flex items-center justify-between mb-4">
-            <span className="text-xs text-slate-500">Nova transação</span>
+            <span className="text-xs text-muted-foreground">Nova transação</span>
             <ExportDialog />
           </div>
           <ExpenseForm />

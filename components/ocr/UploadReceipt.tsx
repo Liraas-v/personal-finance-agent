@@ -69,10 +69,10 @@ export function UploadReceipt() {
               onDragOver={(e) => { e.preventDefault(); setIsDragging(true) }}
               onDragLeave={() => setIsDragging(false)}
               onDrop={handleDrop}
-              className={`flex flex-col items-center justify-center h-56 rounded-xl border-2 border-dashed cursor-pointer transition-colors ${
+              className={`flex flex-col items-center justify-center h-56 rounded-lg border-2 border-dashed cursor-pointer transition-colors ${
                 isDragging
-                  ? 'border-violet-500 bg-violet-500/5'
-                  : 'border-[#2a2a3e] hover:border-[#3a3a5e] bg-[#0f0f17]'
+                  ? 'border-primary/40 bg-primary/5'
+                  : 'border-border-strong hover:border-border-strong bg-card'
               }`}
             >
               <input
@@ -83,20 +83,20 @@ export function UploadReceipt() {
               />
               {processing ? (
                 <div className="text-center">
-                  <ScanLine size={32} className="text-violet-400 mx-auto mb-2 animate-pulse" />
-                  <p className="text-sm text-slate-400">Processando com Tesseract...</p>
+                  <ScanLine size={32} className="text-primary mx-auto mb-2 animate-pulse" />
+                  <p className="text-sm text-foreground-secondary">Processando com Tesseract...</p>
                 </div>
               ) : (
                 <div className="text-center">
-                  <Upload size={32} className="text-slate-600 mx-auto mb-3" />
-                  <p className="text-sm text-slate-400">Arraste um comprovante ou clique para selecionar</p>
-                  <p className="text-xs text-slate-600 mt-1">PNG, JPG ou PDF</p>
+                  <Upload size={32} className="text-muted-foreground mx-auto mb-3" />
+                  <p className="text-sm text-foreground-secondary">Arraste um comprovante ou clique para selecionar</p>
+                  <p className="text-xs text-muted-foreground mt-1">PNG, JPG ou PDF</p>
                 </div>
               )}
             </label>
 
             {preview && (
-              <div className="mt-3 rounded-xl overflow-hidden border border-[#1e1e2e] max-h-64">
+              <div className="mt-3 rounded-lg overflow-hidden border border-border max-h-64">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={preview} alt="preview" className="w-full object-contain max-h-64" />
               </div>
@@ -106,7 +106,7 @@ export function UploadReceipt() {
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="mt-3 flex items-center gap-2 p-3 bg-rose-500/10 border border-rose-500/20 rounded-xl text-sm text-rose-400"
+                className="mt-3 flex items-center gap-2 p-3 bg-negative/10 border border-negative/20 rounded-lg text-sm text-negative"
               >
                 <X size={14} />
                 {error}
@@ -119,10 +119,10 @@ export function UploadReceipt() {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
           >
-            <div className="flex items-center gap-2 mb-4 p-3 bg-emerald-500/10 border border-emerald-500/20 rounded-xl">
-              <CheckCircle2 size={16} className="text-emerald-400" />
-              <span className="text-sm text-emerald-300">Dados extraídos com sucesso. Revise e confirme.</span>
-              <button onClick={reset} className="ml-auto text-slate-500 hover:text-slate-300">
+            <div className="flex items-center gap-2 mb-4 p-3 bg-positive/10 border border-positive/20 rounded-lg">
+              <CheckCircle2 size={16} className="text-positive" />
+              <span className="text-sm text-positive">Dados extraídos com sucesso. Revise e confirme.</span>
+              <button onClick={reset} className="ml-auto text-muted-foreground hover:text-foreground-secondary">
                 <X size={14} />
               </button>
             </div>

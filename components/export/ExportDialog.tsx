@@ -91,32 +91,32 @@ export function ExportDialog() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" size="sm" className="h-8 gap-1.5 bg-[#1e1e2e] border-[#2a2a3e] text-slate-400 hover:text-slate-200 text-xs">
+        <Button variant="outline" size="sm" className="h-8 gap-1.5 bg-muted border-border-strong text-foreground-secondary hover:text-foreground text-xs">
           <Download size={13} />
           Exportar
         </Button>
       </DialogTrigger>
-      <DialogContent className="bg-[#0f0f17] border-[#1e1e2e] text-slate-100 max-w-sm">
+      <DialogContent className="bg-card border-border text-foreground max-w-sm">
         <DialogHeader>
           <DialogTitle className="text-sm font-semibold">Exportar dados</DialogTitle>
         </DialogHeader>
 
         <div className="space-y-3 mt-2">
-          <p className="text-xs text-slate-500 uppercase tracking-wide">Período</p>
+          <p className="text-xs text-muted-foreground uppercase tracking-wide">Período</p>
           {OPCOES.map((op) => (
             <button
               key={op.value}
               onClick={() => setPeriodo(op.value)}
               className={`w-full text-left px-3 py-2.5 rounded-lg border transition-colors ${
                 periodo === op.value
-                  ? 'border-violet-500/50 bg-violet-500/10'
-                  : 'border-[#1e1e2e] hover:border-[#2a2a3e] hover:bg-[#1e1e2e]'
+                  ? 'border-primary/40 bg-primary/10'
+                  : 'border-border hover:border-border-strong hover:bg-muted'
               }`}
             >
-              <p className={`text-sm font-medium ${periodo === op.value ? 'text-violet-300' : 'text-slate-200'}`}>
+              <p className={`text-sm font-medium ${periodo === op.value ? 'text-primary' : 'text-foreground'}`}>
                 {op.label}
               </p>
-              <p className="text-xs text-slate-500 mt-0.5">{op.sub}</p>
+              <p className="text-xs text-muted-foreground mt-0.5">{op.sub}</p>
             </button>
           ))}
         </div>

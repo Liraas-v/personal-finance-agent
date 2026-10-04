@@ -1,6 +1,6 @@
 'use client'
 import { useState, useRef, useEffect } from 'react'
-import { Send, Trash2, BarChart2, Mic, MicOff } from 'lucide-react'
+import { Send, Trash2, BarChart2, Mic, MicOff, Volume2 } from 'lucide-react'
 import { useChat } from '@/hooks/useChat'
 import { useSpeech } from '@/hooks/useSpeech'
 import { useVoice } from '@/hooks/useVoice'
@@ -69,8 +69,8 @@ export function ChatPanel() {
           className={cn(
             'flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg border transition-colors',
             contextEnabled
-              ? 'border-violet-700 bg-violet-950 text-violet-300'
-              : 'border-[#2a2a3e] bg-transparent text-slate-500'
+              ? 'border-primary/40 bg-primary/10 text-primary'
+              : 'border-border-strong bg-transparent text-muted-foreground'
           )}
         >
           <BarChart2 size={11} />
@@ -79,7 +79,7 @@ export function ChatPanel() {
         {messages.length > 0 && (
           <button
             onClick={clearChat}
-            className="text-slate-600 hover:text-slate-400 transition-colors p-1"
+            className="text-muted-foreground hover:text-foreground-secondary transition-colors p-1"
             title="Limpar chat"
           >
             <Trash2 size={14} />
@@ -90,7 +90,7 @@ export function ChatPanel() {
       {/* Messages */}
       <div className="flex-1 overflow-y-auto space-y-3 mb-4 min-h-0 pr-1">
         {messages.length === 0 && (
-          <div className="flex flex-col items-center justify-center h-full text-slate-600 gap-2 py-16">
+          <div className="flex flex-col items-center justify-center h-full text-muted-foreground gap-2 py-16">
             <p className="text-sm">Olá! Como posso ajudar com suas finanças?</p>
             <p className="text-xs opacity-70">
               {contextEnabled
@@ -107,10 +107,10 @@ export function ChatPanel() {
           >
             <div
               className={cn(
-                'max-w-[80%] px-4 py-2.5 rounded-xl text-sm leading-relaxed whitespace-pre-wrap',
+                'max-w-[80%] px-4 py-2.5 rounded-lg text-sm leading-relaxed whitespace-pre-wrap',
                 msg.role === 'user'
-                  ? 'bg-[#1e1e2e] text-slate-200 rounded-tr-sm'
-                  : 'bg-[#1a1040] border border-violet-900/40 text-violet-100 rounded-tl-sm'
+                  ? 'bg-primary text-primary-foreground rounded-tr-sm'
+                  : 'bg-muted text-foreground rounded-tl-sm'
               )}
             >
               {msg.content}
@@ -122,7 +122,7 @@ export function ChatPanel() {
                     {([6, 10, 14, 10, 6] as const).map((h, i) => (
                       <span
                         key={i}
-                        className="w-[2px] bg-violet-500 rounded-sm"
+                        className="w-[2px] bg-primary rounded-sm"
                         style={{
                           height: `${h}px`,
                           animation: 'waveBar 0.8s ease infinite',
@@ -131,10 +131,10 @@ export function ChatPanel() {
                       />
                     ))}
                   </div>
-                  <span className="text-[10px] text-violet-400">falando...</span>
+                  <span className="text-xs text-primary">falando...</span>
                   <button
                     onClick={stop}
-                    className="ml-auto text-[10px] text-violet-400 border border-violet-900/60 rounded px-1.5 py-0.5 hover:text-violet-200 transition-colors"
+                    className="ml-auto text-xs text-primary border border-primary/40 rounded px-1.5 py-0.5 hover:text-primary transition-colors"
                   >
                     ■ parar
                   </button>
@@ -146,12 +146,12 @@ export function ChatPanel() {
 
         {loading && (
           <div className="flex justify-start">
-            <div className="bg-[#1a1040] border border-violet-900/40 px-4 py-3 rounded-xl rounded-tl-sm">
+            <div className="border border-border bg-muted px-4 py-3 rounded-lg rounded-tl-sm">
               <span className="flex gap-1 items-center">
                 {[0, 1, 2].map((i) => (
                   <span
                     key={i}
-                    className="w-1.5 h-1.5 bg-violet-400 rounded-full animate-bounce"
+                    className="w-1.5 h-1.5 bg-primary rounded-full animate-bounce"
                     style={{ animationDelay: `${i * 0.15}s` }}
                   />
                 ))}
@@ -174,17 +174,17 @@ export function ChatPanel() {
               : 'Pergunte algo sobre suas finanças... (Enter para enviar)'
           }
           rows={2}
-          className="flex-1 resize-none bg-[#1e1e2e] border border-[#2a2a3e] rounded-xl px-4 py-3 text-sm text-slate-200 placeholder:text-slate-600 focus:outline-none focus:border-violet-700 transition-colors"
+          className="flex-1 resize-none bg-muted border border-border-strong rounded-lg px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary transition-colors"
         />
         {sttSupported && (
           <button
             onClick={toggleMic}
             title={isListening ? 'Parar gravação' : 'Falar pergunta'}
             className={cn(
-              'self-end w-10 h-10 rounded-xl flex items-center justify-center border transition-colors',
+              'self-end w-10 h-10 rounded-lg flex items-center justify-center border transition-colors',
               isListening
-                ? 'bg-red-500/20 border-red-500/60 text-red-400'
-                : 'bg-[#1e1e2e] border-[#2a2a3e] text-slate-500 hover:text-slate-300'
+                ? 'bg-negative/20 border-negative/60 text-negative'
+                : 'bg-muted border-border-strong text-muted-foreground hover:text-foreground-secondary'
             )}
           >
             {isListening ? <MicOff size={15} /> : <Mic size={15} />}
@@ -193,7 +193,7 @@ export function ChatPanel() {
         <Button
           onClick={handleSend}
           disabled={!input.trim() || loading}
-          className="bg-violet-700 hover:bg-violet-600 self-end"
+          className="bg-primary hover:bg-primary/90 self-end"
           size="icon"
         >
           <Send size={16} />
@@ -206,20 +206,20 @@ export function ChatPanel() {
           <button
             onClick={() => setJarvisEnabled((v) => !v)}
             className={cn(
-              'w-full flex items-center justify-between px-4 py-2.5 rounded-xl border text-xs transition-colors',
+              'w-full flex items-center justify-between px-4 py-2.5 rounded-lg border text-xs transition-colors',
               jarvisEnabled
-                ? 'bg-[#1a1040] border-violet-700 text-violet-300'
-                : 'bg-transparent border-[#2a2a3e] text-slate-600 hover:text-slate-400'
+                ? 'bg-primary/10 border-primary/40 text-primary'
+                : 'bg-transparent border-border-strong text-muted-foreground hover:text-foreground-secondary'
             )}
           >
             <span className="flex items-center gap-2">
-              🔊
-              <span>Modo Jarvis — responde e fala automaticamente</span>
+              <Volume2 size={14} />
+              <span>Responder por voz automaticamente</span>
             </span>
             <span
               className={cn(
-                'px-2 py-0.5 rounded-full text-[10px] font-medium',
-                jarvisEnabled ? 'bg-violet-700 text-white' : 'bg-[#2a2a3e] text-slate-500'
+                'px-2 py-0.5 rounded-full text-xs font-medium',
+                jarvisEnabled ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'
               )}
             >
               {jarvisEnabled ? 'ON' : 'OFF'}

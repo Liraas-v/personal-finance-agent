@@ -4,9 +4,9 @@ import { Lightbulb, AlertTriangle, Trophy } from 'lucide-react'
 import type { Insight } from '@/types'
 
 const TIPO_CONFIG = {
-  dica: { icon: <Lightbulb size={16} />, color: 'text-sky-400', bg: 'bg-sky-500/10 border-sky-500/20' },
-  alerta: { icon: <AlertTriangle size={16} />, color: 'text-amber-400', bg: 'bg-amber-500/10 border-amber-500/20' },
-  conquista: { icon: <Trophy size={16} />, color: 'text-emerald-400', bg: 'bg-emerald-500/10 border-emerald-500/20' },
+  dica: { icon: <Lightbulb size={16} />, color: 'text-primary', bg: 'bg-primary/10 border-primary/20' },
+  alerta: { icon: <AlertTriangle size={16} />, color: 'text-warning', bg: 'bg-warning/10 border-warning/20' },
+  conquista: { icon: <Trophy size={16} />, color: 'text-positive', bg: 'bg-positive/10 border-positive/20' },
 }
 
 export function InsightCard({ insight, index }: { insight: Insight; index: number }) {
@@ -17,10 +17,10 @@ export function InsightCard({ insight, index }: { insight: Insight; index: numbe
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.1, duration: 0.4 }}
-      className={`flex gap-3 p-4 rounded-xl border ${cfg.bg}`}
+      className={`flex gap-3 p-4 rounded-lg border ${cfg.bg}`}
     >
       <span className={cfg.color}>{cfg.icon}</span>
-      <p className="text-sm text-slate-200 leading-relaxed">{insight.texto}</p>
+      <p className="text-sm text-foreground leading-relaxed">{insight.texto}</p>
     </motion.div>
   )
 }

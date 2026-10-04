@@ -75,18 +75,18 @@ export function GoalsPanel() {
       <motion.div
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-[#0f0f17] border border-[#1e1e2e] rounded-xl p-5"
+        className="bg-card border border-border rounded-lg p-5"
       >
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
-            <Target size={16} className="text-violet-400" />
-            <h3 className="text-sm font-semibold text-slate-200">Meta de Economia Mensal</h3>
+            <Target size={16} className="text-primary" />
+            <h3 className="text-sm font-semibold text-foreground">Meta de Economia Mensal</h3>
           </div>
           <Button
             variant="ghost"
             size="sm"
             onClick={() => setEditingMeta(!editingMeta)}
-            className="text-xs text-slate-500 h-7"
+            className="text-xs text-muted-foreground h-7"
           >
             Editar
           </Button>
@@ -98,7 +98,7 @@ export function GoalsPanel() {
               value={metaValue}
               onChange={(e) => setMetaValue(e.target.value)}
               placeholder="Ex: 2000"
-              className="h-8 text-sm bg-[#1e1e2e] border-[#2a2a3e] text-slate-100 w-40"
+              className="h-8 text-sm bg-muted border-border-strong text-foreground w-40"
             />
             <Button size="sm" className="h-8 text-xs" onClick={saveMeta} disabled={saving}>
               {saving ? 'Salvando...' : 'Salvar'}
@@ -107,25 +107,25 @@ export function GoalsPanel() {
         )}
 
         <div className="space-y-2">
-          <div className="flex justify-between text-xs text-slate-500">
+          <div className="flex justify-between text-xs text-muted-foreground">
             <span>Economizado: {fmt(Math.max(0, saldo))}</span>
             <span>Meta: {fmt(metaEconomia)}</span>
           </div>
           <Progress value={Math.max(0, Math.min(100, metaPct))} className="h-2" />
           <div className="flex items-center gap-1.5 text-xs">
             {metaPct >= 100 ? (
-              <><CheckCircle2 size={12} className="text-emerald-400" /><span className="text-emerald-400">Meta atingida!</span></>
+              <><CheckCircle2 size={12} className="text-positive" /><span className="text-positive">Meta atingida!</span></>
             ) : metaPct >= 70 ? (
-              <><CheckCircle2 size={12} className="text-sky-400" /><span className="text-sky-400">{metaPct.toFixed(0)}% concluído</span></>
+              <><CheckCircle2 size={12} className="text-primary" /><span className="text-primary">{metaPct.toFixed(0)}% concluído</span></>
             ) : (
-              <><AlertTriangle size={12} className="text-amber-400" /><span className="text-amber-400">{metaPct.toFixed(0)}% concluído</span></>
+              <><AlertTriangle size={12} className="text-warning" /><span className="text-warning">{metaPct.toFixed(0)}% concluído</span></>
             )}
           </div>
         </div>
       </motion.div>
 
-      <div className="bg-[#0f0f17] border border-[#1e1e2e] rounded-xl p-5">
-        <h3 className="text-sm font-semibold text-slate-200 mb-4">Limites por Categoria</h3>
+      <div className="bg-card border border-border rounded-lg p-5">
+        <h3 className="text-sm font-semibold text-foreground mb-4">Limites por Categoria</h3>
         <div className="space-y-4">
           {ALL_CATEGORIES.filter((c) => c !== 'Outros').map((cat, i) => {
             const spent = porCategoria[cat] ?? 0
@@ -142,16 +142,16 @@ export function GoalsPanel() {
                 transition={{ delay: i * 0.04 }}
                 className={cn(
                   'rounded-lg transition-colors',
-                  isOver && 'border border-rose-500/40 bg-rose-500/5 px-2 py-1',
-                  isWarn && !isOver && 'border border-amber-500/30 bg-amber-500/5 px-2 py-1'
+                  isOver && 'border border-negative/40 bg-negative/5 px-2 py-1',
+                  isWarn && !isOver && 'border border-warning/30 bg-warning/5 px-2 py-1'
                 )}
               >
                 <div className="flex items-center justify-between mb-1.5">
-                  <span className={`text-xs ${isOver ? 'text-rose-400' : isWarn ? 'text-amber-400' : 'text-slate-300'}`}>
+                  <span className={`text-xs ${isOver ? 'text-negative' : isWarn ? 'text-warning' : 'text-foreground-secondary'}`}>
                     {cat}
                   </span>
                   <div className="flex items-center gap-2">
-                    <span className={`text-xs ${isOver ? 'text-rose-400' : isWarn ? 'text-amber-400' : 'text-slate-500'}`}>
+                    <span className={`text-xs ${isOver ? 'text-negative' : isWarn ? 'text-warning' : 'text-muted-foreground'}`}>
                       {fmt(spent)}{limit > 0 ? ` / ${fmt(limit)}` : ''}
                     </span>
                     {editingCat === cat ? (
@@ -160,7 +160,7 @@ export function GoalsPanel() {
                           value={catLimit}
                           onChange={(e) => setCatLimit(e.target.value)}
                           placeholder="Limite"
-                          className="h-6 text-xs bg-[#1e1e2e] border-[#2a2a3e] w-20 sm:w-24"
+                          className="h-6 text-xs bg-muted border-border-strong w-20 sm:w-24"
                         />
                         <Button
                           size="sm"
@@ -174,7 +174,7 @@ export function GoalsPanel() {
                     ) : (
                       <button
                         onClick={() => { setEditingCat(cat); setCatLimit(limit?.toString() ?? '') }}
-                        className="text-[10px] text-slate-600 hover:text-slate-400"
+                        className="text-xs text-muted-foreground hover:text-foreground-secondary"
                       >
                         definir
                       </button>
@@ -184,7 +184,7 @@ export function GoalsPanel() {
                 {limit > 0 && (
                   <Progress
                     value={Math.min(100, pct)}
-                    className={`h-1.5 ${isOver ? '[&>div]:bg-rose-500' : isWarn ? '[&>div]:bg-amber-500' : '[&>div]:bg-violet-600'}`}
+                    className={`h-1.5 ${isOver ? '[&>div]:bg-negative' : isWarn ? '[&>div]:bg-warning' : '[&>div]:bg-primary'}`}
                   />
                 )}
               </motion.div>
