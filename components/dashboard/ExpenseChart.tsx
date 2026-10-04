@@ -73,6 +73,18 @@ export function ExpenseChart() {
           Sem dados para exibir
         </div>
       ) : (
+        <>
+        <ul className="mb-3 flex gap-4 text-xs text-foreground-secondary">
+          {[
+            { label: 'Gastos', color: colors.neutral },
+            { label: 'Receitas', color: colors.primary },
+          ].map(({ label, color }) => (
+            <li key={label} className="flex items-center gap-1.5">
+              <span aria-hidden className="h-2 w-2 rounded-sm" style={{ background: color }} />
+              {label}
+            </li>
+          ))}
+        </ul>
         <ResponsiveContainer width="100%" height={180}>
           <BarChart data={data} barGap={4}>
             <CartesianGrid stroke={colors.grid} vertical={false} />
@@ -83,6 +95,7 @@ export function ExpenseChart() {
             <Bar dataKey="receitas" name="Receitas" fill={colors.primary} radius={[3, 3, 0, 0]} />
           </BarChart>
         </ResponsiveContainer>
+        </>
       )}
     </div>
   )
