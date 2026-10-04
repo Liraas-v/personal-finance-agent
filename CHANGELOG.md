@@ -9,6 +9,8 @@ Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/).
 - Sugestões de pergunta no estado vazio do chat.
 
 ### Alterado
+- Dependências atualizadas: Next 16.3, React 19.3, Recharts 3.10, Radix, Lucide, framer-motion 13, Vitest 5, jsdom 30, `@types/node` 22, `actions/checkout` e `actions/setup-node` v7.
+- Dependabot ignora o ESLint 10 e o `@vitejs/plugin-react` 6.1+ até as dependências que os bloqueiam migrarem (motivos no `dependabot.yml`).
 - Chat em coluna única; a resposta por voz vira um botão de ícone no campo de mensagem.
 - Insights com mensagens coerentes com os dados e botão "Tentar de novo" quando a IA não responde.
 - Transações listadas da mais recente para a mais antiga; "Últimas transações" do dashboard passa a mostrar as mais recentes.
