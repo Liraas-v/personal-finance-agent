@@ -1,3 +1,4 @@
+import { test, expect } from 'vitest'
 import { formatCurrency } from '@/lib/currency'
 
 test('formata BRL corretamente', () => {
