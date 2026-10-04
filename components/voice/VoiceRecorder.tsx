@@ -72,9 +72,9 @@ export function VoiceRecorder() {
             initial={{ opacity: 0, y: 10, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 10, scale: 0.95 }}
-            className="bg-[#0f0f17] border border-[#1e1e2e] rounded-xl px-4 py-2 max-w-xs text-sm text-slate-300 shadow-2xl"
+            className="bg-card border border-border rounded-lg px-4 py-2 max-w-xs text-sm text-foreground-secondary shadow-md"
           >
-            <p className="text-xs text-violet-400 mb-1">Ouvindo...</p>
+            <p className="text-xs text-primary mb-1">Ouvindo...</p>
             <p>{interim}</p>
           </motion.div>
         )}
@@ -85,12 +85,12 @@ export function VoiceRecorder() {
         {isListening && (
           <>
             <motion.div
-              className="absolute inset-0 rounded-full bg-violet-600"
+              className="absolute inset-0 rounded-full bg-primary"
               animate={{ scale: [1, 1.6], opacity: [0.4, 0] }}
               transition={{ duration: 1.2, repeat: Infinity }}
             />
             <motion.div
-              className="absolute inset-0 rounded-full bg-violet-600"
+              className="absolute inset-0 rounded-full bg-primary"
               animate={{ scale: [1, 2.2], opacity: [0.3, 0] }}
               transition={{ duration: 1.2, repeat: Infinity, delay: 0.3 }}
             />
@@ -100,21 +100,16 @@ export function VoiceRecorder() {
         <motion.button
           onClick={toggle}
           whileTap={{ scale: 0.92 }}
-          className={`relative w-14 h-14 rounded-full flex items-center justify-center shadow-2xl transition-colors ${
+          className={`relative w-14 h-14 rounded-full flex items-center justify-center shadow-md transition-colors ${
             isListening
-              ? 'bg-red-500 hover:bg-red-600'
-              : 'bg-gradient-to-br from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500'
+              ? 'bg-negative hover:bg-negative'
+              : 'bg-primary hover:bg-primary/90'
           }`}
-          style={{
-            boxShadow: isListening
-              ? '0 0 30px rgba(239,68,68,0.5)'
-              : '0 0 30px rgba(124,58,237,0.4)',
-          }}
         >
           {isListening ? (
-            <MicOff size={22} className="text-white" />
+            <MicOff size={22} className="text-primary-foreground" />
           ) : (
-            <Mic size={22} className="text-white" />
+            <Mic size={22} className="text-primary-foreground" />
           )}
         </motion.button>
       </div>
