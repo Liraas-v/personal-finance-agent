@@ -1,3 +1,4 @@
+import { v4 as uuidv4 } from 'uuid'
 import { MAX_PARCELAS, splitInstallments } from '@/lib/installments'
 import type { CreateTransactionInput } from '@/lib/repositories/types'
 import type { OrigemTransacao, ParsedVoice } from '@/types'
@@ -15,13 +16,15 @@ export function buildTransactionInputs(
     parsed.pagamento === 'parcelado' && parcelas !== undefined && Number.isInteger(parcelas) && parcelas >= 2 && parcelas <= MAX_PARCELAS
 
   if (parcelar) {
-    return splitInstallments({ total: parsed.valor, parcelas, primeiraData: data, descricao: parsed.descricao }).map((p) => ({
+    const grupoParcelas = uuidv4()
+    return splitInstallments({ total: parsed.valor, parcelas, primeiraData: data, descricao: parsed.descricao, grupoParcelas }).map((p) => ({
       tipo: parsed.tipo,
       descricao: p.descricao,
       valor: p.valor,
       categoria,
       pagamento: parsed.pagamento,
       parcelas: p.parcelas,
+      grupoParcelas: p.grupoParcelas,
       data: p.data,
       origem,
     }))
