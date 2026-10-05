@@ -2,6 +2,7 @@ import { Settings } from 'lucide-react'
 import { OllamaSection } from '@/components/settings/OllamaSection'
 import { StatusSection } from '@/components/settings/StatusSection'
 import { MetasSection } from '@/components/settings/MetasSection'
+import { CategoriasSection } from '@/components/settings/CategoriasSection'
 import { DadosSection } from '@/components/settings/DadosSection'
 import { AparenciaSection } from '@/components/settings/AparenciaSection'
 
@@ -19,6 +20,7 @@ export default function SettingsPage() {
         {!isDemoMode && <OllamaSection />}
         <StatusSection />
         <MetasSection />
+        <CategoriasSection />
         <DadosSection />
       </div>
     </div>

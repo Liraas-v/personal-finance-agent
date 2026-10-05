@@ -95,4 +95,29 @@ describe('GroqProvider', () => {
       await expect(new GroqProvider().analyzeExpense('x 10')).rejects.toMatchObject({ reason: 'http' })
     })
   })
+
+  describe('categorias no prompt', () => {
+    const prompt = async (categorias?: string[]) => {
+      fetchMock.mockResolvedValue({
+        ok: true,
+        json: async () => ({ choices: [{ message: { content: '{"categoria":"Outros","descricao":"x","pagamento":"pix"}' } }] }),
+      })
+      const { GroqProvider } = await import('@/services/ai/groqProvider')
+      await new GroqProvider().analyzeExpense('x 10', categorias)
+      const [, options] = fetchMock.mock.calls[0] as [string, RequestInit]
+      return JSON.parse(options.body as string).messages[0].content as string
+    }
+
+    it('lista exatamente as categorias recebidas', async () => {
+      const p = await prompt(['Pets', 'Casa', 'Outros'])
+      expect(p).toContain('Categorias válidas: Pets, Casa, Outros.')
+      expect(p).not.toContain('Lazer')
+    })
+
+    it('sem a lista, usa as categorias padrão', async () => {
+      const p = await prompt()
+      expect(p).toContain('Alimentação')
+      expect(p).toContain('Lazer')
+    })
+  })
 })

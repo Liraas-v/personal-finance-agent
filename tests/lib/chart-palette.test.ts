@@ -18,7 +18,7 @@ const THEMES = {
   escuro: tokens(/\.dark\s*\{([^}]*)\}/),
 }
 
-const CATS = [1, 2, 3, 4, 5, 6, 7, 8].map((n) => `cat-${n}`)
+const CATS = Array.from({ length: 12 }, (_, i) => `cat-${i + 1}`)
 const MIN_DELTA_E = 25
 const MIN_CONTRAST = 3
 
@@ -53,7 +53,7 @@ function deltaE(a: string, b: string): number {
 }
 
 describe.each(Object.entries(THEMES))('paleta das categorias — tema %s', (_nome, t) => {
-  it('define as 8 cores de categoria e a cor de "Outros"', () => {
+  it('define as 12 cores de categoria e a cor de "Outros"', () => {
     for (const k of [...CATS, 'chart-neutral']) expect(t[k], `token --${k} ausente`).toBeDefined()
   })
 

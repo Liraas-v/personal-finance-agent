@@ -2,6 +2,7 @@ import { readConfig } from '@/lib/db'
 import type { TransactionSummary, ParsedTransaction } from '@/types'
 import type { AIProvider } from './types'
 import { AIProviderError, toAIProviderError } from './errors'
+import { ALL_CATEGORIES } from '@/lib/categories'
 import { parseExpense, parseInsights } from './parse'
 
 async function ollamaGenerate(prompt: string, url: string, model: string, json = false): Promise<string> {
@@ -26,10 +27,10 @@ export class OllamaProvider implements AIProvider {
     return ollamaGenerate(prompt, ollama.url, ollama.model)
   }
 
-  async analyzeExpense(text: string): Promise<ParsedTransaction> {
+  async analyzeExpense(text: string, categorias?: string[]): Promise<ParsedTransaction> {
     const { ollama } = readConfig()
     const prompt = `Analise este gasto e retorne JSON com campos categoria, descricao, pagamento.
-Categorias válidas: Alimentação, Transporte, Saúde, Assinaturas, Compras, Moradia, Educação, Lazer, Outros.
+Categorias válidas: ${(categorias?.length ? categorias : ALL_CATEGORIES).join(', ')}.
 Formas de pagamento: crédito, débito, pix, dinheiro, parcelado.
 Texto: "${text}"
 Retorne apenas o JSON.`

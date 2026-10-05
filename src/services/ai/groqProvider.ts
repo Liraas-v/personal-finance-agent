@@ -1,6 +1,7 @@
 import type { TransactionSummary, ParsedTransaction } from '@/types'
 import type { AIProvider } from './types'
 import { AIProviderError, toAIProviderError } from './errors'
+import { ALL_CATEGORIES } from '@/lib/categories'
 import { parseExpense, parseInsights } from './parse'
 
 const GROQ_URL = 'https://api.groq.com/openai/v1/chat/completions'
@@ -42,9 +43,9 @@ export class GroqProvider implements AIProvider {
     return groqComplete(prompt)
   }
 
-  async analyzeExpense(text: string): Promise<ParsedTransaction> {
+  async analyzeExpense(text: string, categorias?: string[]): Promise<ParsedTransaction> {
     const prompt = `Analise este gasto e retorne APENAS um JSON com campos categoria, descricao, pagamento.
-Categorias válidas: Alimentação, Transporte, Saúde, Assinaturas, Compras, Moradia, Educação, Lazer, Outros.
+Categorias válidas: ${(categorias?.length ? categorias : ALL_CATEGORIES).join(', ')}.
 Formas de pagamento: crédito, débito, pix, dinheiro, parcelado.
 Texto: "${text}"`
     return parseExpense(await groqComplete(prompt, true))

@@ -50,3 +50,23 @@ describe('GoalsPanel', () => {
     expect(linha.getAttribute('data-status')).toBe('over')
   })
 })
+
+describe('GoalsPanel — categorias da configuração', () => {
+  it('uma linha por categoria da configuração (exceto "Outros"), com limite editável nas novas', () => {
+    useFinanceStore.setState({
+      config: { moeda: 'BRL', metaEconomia: 0, limitesPorCategoria: { Pets: 300 }, categorias: ['Alimentação', 'Pets'] } as never,
+    })
+    render(<GoalsPanel />)
+    const linhas = Array.from(document.querySelectorAll('li[data-categoria]')).map((li) => li.getAttribute('data-categoria'))
+    expect(linhas).toEqual(['Alimentação', 'Pets'])
+    expect(screen.getByRole('button', { name: 'Editar limite de Pets' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Definir limite de Alimentação' })).toBeInTheDocument()
+  })
+
+  it('config antiga, sem "categorias", mostra as 8 padrão', () => {
+    useFinanceStore.setState({ config: { moeda: 'BRL', metaEconomia: 0, limitesPorCategoria: {} } as never })
+    render(<GoalsPanel />)
+    expect(document.querySelectorAll('li[data-categoria]')).toHaveLength(8)
+  })
+})
+

@@ -3,6 +3,8 @@ import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts'
 import { useTransactions } from '@/hooks/useTransactions'
 import { useChartColors } from '@/hooks/useChartColors'
 import { categoryColor } from '@/lib/chartColors'
+import { getCategorias } from '@/lib/customCategories'
+import { useFinanceStore } from '@/lib/store'
 
 function formatPct(value: number, total: number): string {
   if (total <= 0) return '0%'
@@ -13,12 +15,13 @@ function formatPct(value: number, total: number): string {
 export function CategoryChart() {
   const { porCategoria } = useTransactions()
   const colors = useChartColors()
+  const categorias = getCategorias(useFinanceStore((s) => s.config))
 
-  // Cada categoria tem uma cor fixa (pelo nome), então o gráfico e a legenda concordam e a cor
-  // de "Alimentação" é a mesma em qualquer tela, com 3 ou com 8 categorias.
+  // A cor vem da posição da categoria na lista configurada, então o gráfico e a legenda concordam e
+  // a cor de "Alimentação" é a mesma em qualquer tela, com 3 ou com 12 categorias à mostra.
   const data = Object.entries(porCategoria)
     .sort(([, a], [, b]) => b - a)
-    .map(([name, value]) => ({ name, value, color: categoryColor(colors, name) }))
+    .map(([name, value]) => ({ name, value, color: categoryColor(colors, name, categorias) }))
   const total = data.reduce((sum, d) => sum + d.value, 0)
 
   return (

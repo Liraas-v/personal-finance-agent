@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { render, screen, fireEvent, waitFor } from '@testing-library/react'
+import { render, screen, fireEvent, waitFor, within } from '@testing-library/react'
 
 const create = vi.fn()
 const createMany = vi.fn()
@@ -137,3 +137,27 @@ describe('ExpenseForm — pagamento parcelado', () => {
     expect(createMany).not.toHaveBeenCalled()
   })
 })
+
+describe('ExpenseForm — categorias da configuração', () => {
+  const opcoes = () => within(screen.getByLabelText('Categoria')).getAllByRole('option').map((o) => o.textContent)
+
+  it('sem "categorias" na configuração (dado antigo) mostra as 9 de hoje', () => {
+    render(<ExpenseForm />)
+    expect(opcoes()).toEqual(['Alimentação', 'Transporte', 'Saúde', 'Assinaturas', 'Compras', 'Moradia', 'Educação', 'Lazer', 'Outros'])
+  })
+
+  it('usa a lista da configuração, com "Outros" por último', () => {
+    useFinanceStore.setState({ config: { moeda: 'BRL', metaEconomia: 0, limitesPorCategoria: {}, categorias: ['Alimentação', 'Pets'] } as never })
+    render(<ExpenseForm />)
+    expect(opcoes()).toEqual(['Alimentação', 'Pets', 'Outros'])
+  })
+
+  it('editando uma transação de categoria que já não existe, ela continua na lista (não é trocada em silêncio)', () => {
+    useFinanceStore.setState({ config: { moeda: 'BRL', metaEconomia: 0, limitesPorCategoria: {}, categorias: ['Alimentação'] } as never })
+    const t = { id: '1', tipo: 'gasto', descricao: 'x', valor: 1, categoria: 'Antiga', pagamento: 'pix', data: '2026-10-01', origem: 'manual', createdAt: '' } as Transaction
+    render(<ExpenseForm transaction={t} />)
+    expect(opcoes()).toContain('Antiga')
+    expect(screen.getByLabelText('Categoria')).toHaveValue('Antiga')
+  })
+})
+

@@ -20,6 +20,8 @@ export interface Transaction {
 export interface Config {
   metaEconomia: number
   limitesPorCategoria: Record<string, number>
+  /** Categorias do usuário, sem "Outros" (implícito, sempre por último). Ausente ⇒ categorias padrão. */
+  categorias?: string[]
   ollama: {
     model: string
     url: string

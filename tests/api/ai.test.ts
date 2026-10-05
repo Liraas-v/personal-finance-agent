@@ -120,4 +120,26 @@ describe('rotas de IA', () => {
     const res = await GET()
     expect(await res.json()).toEqual({ models: ['llama-3.1-8b-instant'] })
   })
+
+  it('POST /api/ai/analyze repassa as categorias ao provider (e garante "Outros")', async () => {
+    mockProvider.analyzeExpense.mockResolvedValue({ categoria: 'Pets', descricao: 'ração', pagamento: 'pix' })
+    const { POST } = await import('@/app/api/ai/analyze/route')
+    const res = await POST(makeRequest({ text: 'ração 50', categorias: ['Pets', 'Casa'] }))
+    expect(mockProvider.analyzeExpense).toHaveBeenCalledWith('ração 50', ['Pets', 'Casa', 'Outros'])
+    expect((await res.json()).categoria).toBe('Pets')
+  })
+
+  it('POST /api/ai/analyze normaliza uma categoria inventada pela IA para "Outros"', async () => {
+    mockProvider.analyzeExpense.mockResolvedValue({ categoria: 'Lazer', descricao: 'cinema', pagamento: 'pix' })
+    const { POST } = await import('@/app/api/ai/analyze/route')
+    const res = await POST(makeRequest({ text: 'cinema 40', categorias: ['Pets'] }))
+    expect((await res.json()).categoria).toBe('Outros')
+  })
+
+  it('POST /api/ai/analyze sem categorias valida contra as padrão', async () => {
+    mockProvider.analyzeExpense.mockResolvedValue({ categoria: 'alimentacao', descricao: 'x', pagamento: 'pix' })
+    const { POST } = await import('@/app/api/ai/analyze/route')
+    const res = await POST(makeRequest({ text: 'x' }))
+    expect((await res.json()).categoria).toBe('Alimentação')
+  })
 })

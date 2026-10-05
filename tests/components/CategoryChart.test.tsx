@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen, within } from '@testing-library/react'
+import { useFinanceStore } from '@/lib/store'
 import { FALLBACK_CHART_COLORS, categoryColor } from '@/lib/chartColors'
 
 let porCategoria: Record<string, number> = {}
@@ -54,3 +55,21 @@ describe('CategoryChart', () => {
     expect((screen.getByText('Lazer').closest('li') as HTMLElement).textContent).toBe('Lazer<1%')
   })
 })
+
+describe('CategoryChart — categorias personalizadas', () => {
+  it('a categoria nova recebe a 9ª cor e as padrão mantêm as suas', () => {
+    useFinanceStore.setState({
+      config: {
+        moeda: 'BRL', metaEconomia: 0, limitesPorCategoria: {},
+        categorias: ['Alimentação', 'Transporte', 'Saúde', 'Assinaturas', 'Compras', 'Moradia', 'Educação', 'Lazer', 'Pets'],
+      } as never,
+    })
+    porCategoria = { Pets: 200, Alimentação: 600 }
+    render(<CategoryChart />)
+    const cor = (nome: string) => (screen.getByText(nome).closest('li') as HTMLElement).querySelector('[data-swatch]')!.getAttribute('data-color')
+    expect(cor('Pets')).toBe(FALLBACK_CHART_COLORS.categories[8])
+    expect(cor('Alimentação')).toBe(FALLBACK_CHART_COLORS.categories[0])
+    useFinanceStore.setState({ config: null })
+  })
+})
+

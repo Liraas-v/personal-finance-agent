@@ -29,7 +29,9 @@
 
   --chart-primary: var(--primary);
   --chart-neutral: #858a94;
-  /* Uma cor fixa por categoria (ordem de ALL_CATEGORIES); "Outros" usa --chart-neutral */
+  /* Cores das categorias, na ordem da lista: 1-8 são as categorias padrão (Alimentação … Lazer), 9-12
+     ficam para as categorias criadas pelo usuário. "Outros" usa --chart-neutral.
+     O teste tests/lib/chart-palette.test.ts exige contraste >= 3:1 sobre o card e ΔE >= 25 entre qualquer par. */
   --cat-1: #c2600a; /* Alimentação */
   --cat-2: #3a6ea5; /* Transporte */
   --cat-3: #3f8a36; /* Saúde */
@@ -38,6 +40,10 @@
   --cat-6: #23857f; /* Moradia */
   --cat-7: #8c7a00; /* Educação */
   --cat-8: #c4302b; /* Lazer */
+  --cat-9: #6f4020; /* 1ª categoria nova: marrom */
+  --cat-10: #202097; /* 2ª: índigo */
+  --cat-11: #5a602e; /* 3ª: verde-oliva */
+  --cat-12: #9724a8; /* 4ª: roxo */
 
   /* aliases shadcn: components/ui/* herdam o tema sem reescrita */
   --popover: var(--card);
@@ -84,6 +90,10 @@
   --cat-6: #54c1b8;
   --cat-7: #e3c63f;
   --cat-8: #ee5d58;
+  --cat-9: #e1b598;
+  --cat-10: #5f5fdd;
+  --cat-11: #b7c07c;
+  --cat-12: #cc5fdd;
 }
 
 @theme inline {
