@@ -3,7 +3,7 @@ import { readFileSync } from 'fs'
 import path from 'path'
 import { THEME_COLOR_LIGHT, THEME_COLOR_DARK } from '@/lib/theme'
 
-const css = readFileSync(path.resolve(__dirname, '../../app/globals.css'), 'utf8')
+const css = readFileSync(path.resolve(__dirname, '../../src/app/globals.css'), 'utf8')
 
 function tokens(re: RegExp): Record<string, string> {
   const body = css.match(re)?.[1] ?? ''

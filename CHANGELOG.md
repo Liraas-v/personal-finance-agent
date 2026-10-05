@@ -5,7 +5,11 @@ Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/).
 ## [Unreleased]
 
 ### Alterado
+- Código-fonte movido para `src/` (`app`, `components`, `hooks`, `lib`, `services`, `types`); a raiz do repositório fica só com configuração, documentação e testes. Screenshots do README passam de `public/` para `docs/`.
 - Favicon e ícones do PWA próprios (gráfico em alta em azul-acinzentado, o mesmo traço do logo do cabeçalho), no lugar do ícone padrão do Next.js. Gerados por `npm run icons`; o manifest passa a incluir PNG de 192 e 512 px.
+
+### Removido
+- README em inglês e a pasta `uploads/` (o OCR usa o diretório temporário do sistema).
 
 ## [0.2.0] - 2026-10-04
 
@@ -13,12 +17,12 @@ Primeira versão publicada: redesign visual, UX por tela e infraestrutura do rep
 
 ### Adicionado
 - Tema claro e escuro (segue o sistema), com seletor no cabeçalho e em Configurações.
-- Tokens semânticos de cor, teste de contraste WCAG nos dois temas e teste que bloqueia cores hardcoded em `app/` e `components/`.
+- Tokens semânticos de cor, teste de contraste WCAG nos dois temas e teste que bloqueia cores hardcoded em `src/app/` e `src/components/`.
 - Dashboard com o saldo como número principal; legenda no gráfico de gastos vs receitas; gráfico de rosca com uma cor fixa por categoria e legenda com o percentual de cada uma.
 - Menu "Mais" na navegação mobile (Insights, OCR, Configurações e tema).
 - Sugestões de pergunta no estado vazio do chat.
 - CI no GitHub Actions (lint, typecheck, testes e build), Dependabot, templates de PR e de issue.
-- README em português e inglês, guia de contribuição e este changelog.
+- README, guia de contribuição e este changelog.
 
 ### Alterado
 - Visual limpo e minimalista: acento azul-acinzentado, fonte Geist, sem gradientes nem brilho. Cores dos gráficos passam a vir das variáveis CSS do tema.

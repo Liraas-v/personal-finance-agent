@@ -41,10 +41,6 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# uploads directory (keep .gitkeep)
-/uploads/*
-!/uploads/.gitkeep
-
 # dados locais do app self-hosted (financeiro pessoal real, nunca deve ir pro repo)
 /data/*
 !/data/.gitkeep

@@ -1,7 +1,5 @@
 # Personal Finance Agent
 
-**Português** · [English](README.en.md)
-
 [![CI](https://github.com/Liraas-v/personal-finance-agent/actions/workflows/ci.yml/badge.svg)](https://github.com/Liraas-v/personal-finance-agent/actions/workflows/ci.yml)
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js&logoColor=white)](https://nextjs.org)
@@ -15,8 +13,8 @@
 **[→ Ver demo ao vivo](https://finance-agent-blue.vercel.app)**
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="public/screenshots/dashboard-dark.png">
-  <img src="public/screenshots/dashboard-light.png" alt="Dashboard do Personal Finance Agent com o saldo do período em destaque">
+  <source media="(prefers-color-scheme: dark)" srcset="docs/screenshots/dashboard-dark.png">
+  <img src="docs/screenshots/dashboard-light.png" alt="Dashboard do Personal Finance Agent com o saldo do período em destaque">
 </picture>
 
 ## O problema
@@ -33,7 +31,7 @@ O produto real é **local-first por padrão**. Mas avaliar um projeto clonando o
 | IA | Ollama, 100% local e offline | Groq (modelo aberto hospedado) |
 | Como ativar | Padrão, nada a configurar | `NEXT_PUBLIC_APP_MODE=demo` + `AI_PROVIDER=groq` |
 
-A troca é feita por interfaces `TransactionRepository`/`ConfigRepository` (`lib/repositories/`) e por um `AIProvider` (`services/ai/`). O resto do app não sabe em qual modo está rodando.
+A troca é feita por interfaces `TransactionRepository`/`ConfigRepository` (`src/lib/repositories/`) e por um `AIProvider` (`src/services/ai/`). O resto do app não sabe em qual modo está rodando.
 
 ## Funcionalidades
 
@@ -48,9 +46,9 @@ A troca é feita por interfaces `TransactionRepository`/`ConfigRepository` (`lib
 
 ## Screenshots
 
-![Transações](public/screenshots/transacoes.png)
-![Chat financeiro](public/screenshots/chat.png)
-![OCR de comprovantes](public/screenshots/ocr.png)
+![Transações](docs/screenshots/transacoes.png)
+![Chat financeiro](docs/screenshots/chat.png)
+![OCR de comprovantes](docs/screenshots/ocr.png)
 
 ## Stack
 
@@ -109,14 +107,18 @@ npm run dev
 ## Estrutura do projeto
 
 ```
-app/            rotas (App Router) e API routes
-components/     componentes de interface, por área (dashboard, chat, goals…) e ui/
-hooks/          hooks de dados e de interação (transações, insights, voz, tema dos gráficos)
-lib/            lógica pura, tokens de gráfico e repositories/ (JSON local, API, localStorage)
-services/ai/    AIProvider (Ollama e Groq) e construção de prompts
-tests/          testes unitários, de componentes e de API
-scripts/        utilitários (captura de screenshots)
-public/         ícone, manifest, service worker e screenshots
+src/
+  app/          rotas (App Router) e API routes
+  components/   componentes de interface, por área (dashboard, chat, goals…) e ui/
+  hooks/        hooks de dados e de interação (transações, insights, voz, tema dos gráficos)
+  lib/          lógica pura, tokens de gráfico e repositories/ (JSON local, API, localStorage)
+  services/ai/  AIProvider (Ollama e Groq) e construção de prompts
+  types/        tipos compartilhados
+tests/          testes unitários, de componentes e de API (espelham a estrutura de src/)
+scripts/        utilitários (screenshots e geração de ícones)
+public/         ícones, manifest e service worker
+docs/           screenshots usados neste README
+data/           dados locais do modo self-hosted (ignorados pelo Git)
 ```
 
 ## Testes e CI
@@ -125,7 +127,7 @@ public/         ícone, manifest, service worker e screenshots
 npm run test:run
 ```
 
-A suíte cobre funções puras, repositórios, `AIProvider`, rotas de API e componentes. Dois testes protegem o design: um bloqueia cores hardcoded e fora do padrão em `app/` e `components/`, e outro valida o contraste WCAG dos dois temas lendo o próprio CSS. O CI roda lint, typecheck, testes e build a cada pull request.
+A suíte cobre funções puras, repositórios, `AIProvider`, rotas de API e componentes. Dois testes protegem o design: um bloqueia cores hardcoded e fora do padrão em `src/app/` e `src/components/`, e outro valida o contraste WCAG dos dois temas lendo o próprio CSS. O CI roda lint, typecheck, testes e build a cada pull request.
 
 ## API
 
@@ -147,7 +149,7 @@ A suíte cobre funções puras, repositórios, `AIProvider`, rotas de API e comp
 ## Roadmap
 
 - [x] Redesign visual com tema claro e escuro
-- [x] CI e documentação bilíngue
+- [x] CI e documentação
 - [x] Reorganização de UX por tela (metas, transações, chat, insights, mobile)
 - [ ] Categorias personalizadas
 - [ ] Testes end-to-end

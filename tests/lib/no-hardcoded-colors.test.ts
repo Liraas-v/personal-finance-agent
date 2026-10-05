@@ -3,8 +3,8 @@ import { readFileSync, readdirSync, statSync } from 'fs'
 import path from 'path'
 
 const ROOT = path.resolve(__dirname, '../..')
-const SCAN_DIRS = ['app', 'components']
-const EXEMPT = new Set(['app/globals.css'])
+const SCAN_DIRS = ['src/app', 'src/components']
+const EXEMPT = new Set(['src/app/globals.css'])
 
 // Arquivos ainda não migrados. Cada task de migração remove os seus daqui; ao final a lista fica vazia.
 const PENDING = new Set<string>([])
