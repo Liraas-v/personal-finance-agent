@@ -1,17 +1,23 @@
 import { readConfig } from '@/lib/db'
 import type { TransactionSummary, ParsedTransaction } from '@/types'
 import type { AIProvider } from './types'
+import { AIProviderError, toAIProviderError } from './errors'
+import { parseExpense, parseInsights } from './parse'
 
 async function ollamaGenerate(prompt: string, url: string, model: string, json = false): Promise<string> {
-  const res = await fetch(`${url}/api/generate`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ model, prompt, stream: false, ...(json ? { format: 'json' } : {}) }),
-    signal: AbortSignal.timeout(json ? 15_000 : 30_000),
-  })
-  if (!res.ok) throw new Error(`Ollama HTTP ${res.status}`)
-  const data = await res.json()
-  return data.response as string
+  try {
+    const res = await fetch(`${url}/api/generate`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ model, prompt, stream: false, ...(json ? { format: 'json' } : {}) }),
+      signal: AbortSignal.timeout(json ? 15_000 : 30_000),
+    })
+    if (!res.ok) throw new AIProviderError('http', `Ollama HTTP ${res.status}`, res.status)
+    const data = await res.json()
+    return (data.response as string) ?? ''
+  } catch (e) {
+    throw toAIProviderError(e)
+  }
 }
 
 export class OllamaProvider implements AIProvider {
@@ -27,12 +33,7 @@ Categorias válidas: Alimentação, Transporte, Saúde, Assinaturas, Compras, Mo
 Formas de pagamento: crédito, débito, pix, dinheiro, parcelado.
 Texto: "${text}"
 Retorne apenas o JSON.`
-    try {
-      const raw = await ollamaGenerate(prompt, ollama.url, ollama.model, true)
-      return JSON.parse(raw)
-    } catch {
-      return { categoria: 'Outros', descricao: text, pagamento: 'crédito' }
-    }
+    return parseExpense(await ollamaGenerate(prompt, ollama.url, ollama.model, true))
   }
 
   async generateInsights(summary: TransactionSummary): Promise<string[]> {
@@ -41,13 +42,7 @@ Retorne apenas o JSON.`
 Dados: ${JSON.stringify(summary, null, 2)}
 Use os valores reais. Seja direto e específico.
 Retorne JSON array de strings, ex: ["insight 1", "insight 2"]`
-    try {
-      const raw = await ollamaGenerate(prompt, ollama.url, ollama.model, true)
-      const parsed = JSON.parse(raw)
-      return Array.isArray(parsed) ? parsed : parsed.insights ?? []
-    } catch {
-      return []
-    }
+    return parseInsights(await ollamaGenerate(prompt, ollama.url, ollama.model, true))
   }
 
   async status(): Promise<{ online: boolean; model: string; loaded?: boolean }> {
