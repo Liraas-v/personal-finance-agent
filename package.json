@@ -1,6 +1,6 @@
 {
     "name": "personal-finance-agent",
-    "version": "0.2.0",
+    "version": "0.3.0",
     "private": true,
     "description": "Agente financeiro pessoal local-first: registre gastos por texto, voz ou foto de recibo, com IA (Ollama) categorizando e gerando insights.",
     "license": "MIT",
