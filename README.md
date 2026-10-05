@@ -31,7 +31,7 @@ O produto real é **local-first por padrão**. Mas avaliar um projeto clonando o
 | IA | Ollama, 100% local e offline | Groq (modelo aberto hospedado) |
 | Como ativar | Padrão, nada a configurar | `NEXT_PUBLIC_APP_MODE=demo` + `AI_PROVIDER=groq` |
 
-A troca é feita por interfaces `TransactionRepository`/`ConfigRepository` (`lib/repositories/`) e por um `AIProvider` (`services/ai/`). O resto do app não sabe em qual modo está rodando.
+A troca é feita por interfaces `TransactionRepository`/`ConfigRepository` (`src/lib/repositories/`) e por um `AIProvider` (`src/services/ai/`). O resto do app não sabe em qual modo está rodando.
 
 ## Funcionalidades
 
@@ -107,15 +107,18 @@ npm run dev
 ## Estrutura do projeto
 
 ```
-app/            rotas (App Router) e API routes
-components/     componentes de interface, por área (dashboard, chat, goals…) e ui/
-hooks/          hooks de dados e de interação (transações, insights, voz, tema dos gráficos)
-lib/            lógica pura, tokens de gráfico e repositories/ (JSON local, API, localStorage)
-services/ai/    AIProvider (Ollama e Groq) e construção de prompts
-tests/          testes unitários, de componentes e de API
-scripts/        utilitários (captura de screenshots)
-public/         ícone, manifest e service worker
+src/
+  app/          rotas (App Router) e API routes
+  components/   componentes de interface, por área (dashboard, chat, goals…) e ui/
+  hooks/        hooks de dados e de interação (transações, insights, voz, tema dos gráficos)
+  lib/          lógica pura, tokens de gráfico e repositories/ (JSON local, API, localStorage)
+  services/ai/  AIProvider (Ollama e Groq) e construção de prompts
+  types/        tipos compartilhados
+tests/          testes unitários, de componentes e de API (espelham a estrutura de src/)
+scripts/        utilitários (screenshots e geração de ícones)
+public/         ícones, manifest e service worker
 docs/           screenshots usados neste README
+data/           dados locais do modo self-hosted (ignorados pelo Git)
 ```
 
 ## Testes e CI
@@ -124,7 +127,7 @@ docs/           screenshots usados neste README
 npm run test:run
 ```
 
-A suíte cobre funções puras, repositórios, `AIProvider`, rotas de API e componentes. Dois testes protegem o design: um bloqueia cores hardcoded e fora do padrão em `app/` e `components/`, e outro valida o contraste WCAG dos dois temas lendo o próprio CSS. O CI roda lint, typecheck, testes e build a cada pull request.
+A suíte cobre funções puras, repositórios, `AIProvider`, rotas de API e componentes. Dois testes protegem o design: um bloqueia cores hardcoded e fora do padrão em `src/app/` e `src/components/`, e outro valida o contraste WCAG dos dois temas lendo o próprio CSS. O CI roda lint, typecheck, testes e build a cada pull request.
 
 ## API
 

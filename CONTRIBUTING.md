@@ -27,6 +27,6 @@ O CI roda os mesmos comandos. Mudanças de lógica devem vir com teste; mudança
 ## Convenções
 
 - **Commits:** conventional commits com descrição em português (`feat:`, `fix:`, `test:`, `docs:`, `chore:`, `refactor:`), pequenos e focados.
-- **Cores:** use os tokens de tema (`bg-card`, `text-foreground`, `text-primary`…). O teste `tests/lib/no-hardcoded-colors.test.ts` bloqueia hex e cores da paleta Tailwind em `app/` e `components/`.
+- **Cores:** use os tokens de tema (`bg-card`, `text-foreground`, `text-primary`…). O teste `tests/lib/no-hardcoded-colors.test.ts` bloqueia hex e cores da paleta Tailwind em `src/app/` e `src/components/`.
 - **Tipografia:** texto mínimo de 12px; valores monetários em `font-mono tabular-nums`.
-- **Dados:** a camada `lib/repositories/` isola o modo self-hosted (JSON local) do modo demo (`localStorage`). Não acesse `fs` nem `localStorage` direto nos componentes.
+- **Dados:** a camada `src/lib/repositories/` isola o modo self-hosted (JSON local) do modo demo (`localStorage`). Não acesse `fs` nem `localStorage` direto nos componentes.
