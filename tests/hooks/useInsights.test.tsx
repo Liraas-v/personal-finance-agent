@@ -59,4 +59,34 @@ describe('useInsights', () => {
     await act(async () => { await result.current.generate() })
     expect(result.current.status).toBe('error')
   })
+
+  it('503 com motivo expõe o motivo ao chamador', async () => {
+    respond({ error: 'x', reason: 'missing_key' }, false)
+    const { result } = renderHook(() => useInsights())
+    await act(async () => { await result.current.generate() })
+    expect(result.current.status).toBe('error')
+    expect(result.current.reason).toBe('missing_key')
+  })
+
+  it('502 com corpo que não é JSON vira error sem motivo', async () => {
+    vi.spyOn(globalThis, 'fetch').mockResolvedValue({
+      ok: false,
+      json: async () => { throw new SyntaxError('x') },
+    } as unknown as Response)
+    const { result } = renderHook(() => useInsights())
+    await act(async () => { await result.current.generate() })
+    expect(result.current.status).toBe('error')
+    expect(result.current.reason).toBeUndefined()
+  })
+
+  it('o motivo é limpo quando a nova tentativa dá certo', async () => {
+    respond({ reason: 'timeout' }, false)
+    const { result } = renderHook(() => useInsights())
+    await act(async () => { await result.current.generate() })
+    expect(result.current.reason).toBe('timeout')
+    respond({ insights: ['a'] })
+    await act(async () => { await result.current.generate() })
+    expect(result.current.status).toBe('ready')
+    expect(result.current.reason).toBeUndefined()
+  })
 })

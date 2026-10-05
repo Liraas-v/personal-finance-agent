@@ -24,12 +24,15 @@ describe('InsightsState', () => {
     expect(onRetry).toHaveBeenCalledTimes(1)
   })
 
-  it('empty também oferece nova tentativa (a IA pode ter falhado em silêncio)', () => {
-    const onRetry = vi.fn()
-    render(<InsightsState status="empty" hasTransactions onRetry={onRetry} />)
-    expect(screen.getByText(/A IA não retornou insights desta vez/)).toBeInTheDocument()
-    fireEvent.click(screen.getByRole('button', { name: 'Tentar de novo' }))
-    expect(onRetry).toHaveBeenCalledTimes(1)
+  it('erro mostra a causa específica quando o motivo é conhecido', () => {
+    render(<InsightsState status="error" hasTransactions onRetry={vi.fn()} reason="timeout" />)
+    expect(screen.getByText('A IA demorou demais para responder.')).toBeInTheDocument()
+  })
+
+  it('empty significa que a IA respondeu sem itens: sem botão de nova tentativa', () => {
+    render(<InsightsState status="empty" hasTransactions onRetry={vi.fn()} />)
+    expect(screen.getByText('Nenhum insight para este período.')).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'Tentar de novo' })).not.toBeInTheDocument()
   })
 
   it('ready e loading não renderizam nada', () => {
