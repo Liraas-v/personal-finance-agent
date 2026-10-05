@@ -1,17 +1,25 @@
 'use client'
-import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Legend } from 'recharts'
+import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts'
 import { useTransactions } from '@/hooks/useTransactions'
 import { useChartColors } from '@/hooks/useChartColors'
-import { categoryColor, groupTopCategories } from '@/lib/chartColors'
+import { categoryColor } from '@/lib/chartColors'
+
+function formatPct(value: number, total: number): string {
+  if (total <= 0) return '0%'
+  const pct = (value / total) * 100
+  return pct > 0 && pct < 1 ? '<1%' : `${Math.round(pct)}%`
+}
 
 export function CategoryChart() {
   const { porCategoria } = useTransactions()
   const colors = useChartColors()
 
-  const data = groupTopCategories(
-    Object.entries(porCategoria).map(([name, value]) => ({ name, value })),
-    colors.categories.length,
-  )
+  // Cada categoria tem uma cor fixa (pelo nome), então o gráfico e a legenda concordam e a cor
+  // de "Alimentação" é a mesma em qualquer tela, com 3 ou com 8 categorias.
+  const data = Object.entries(porCategoria)
+    .sort(([, a], [, b]) => b - a)
+    .map(([name, value]) => ({ name, value, color: categoryColor(colors, name) }))
+  const total = data.reduce((sum, d) => sum + d.value, 0)
 
   return (
     <div className="rounded-lg border border-border bg-card p-4">
@@ -21,40 +29,53 @@ export function CategoryChart() {
           Sem dados para exibir
         </div>
       ) : (
-        <ResponsiveContainer width="100%" height={250}>
-          <PieChart>
-            <Pie
-              data={data}
-              cx="50%"
-              cy="45%"
-              innerRadius={50}
-              outerRadius={80}
-              paddingAngle={2}
-              dataKey="value"
-              stroke={colors.surface}
-              strokeWidth={2}
-            >
-              {data.map((_, i) => (
-                <Cell key={i} fill={categoryColor(colors, i)} />
-              ))}
-            </Pie>
-            <Tooltip
-              contentStyle={{
-                background: colors.surface,
-                border: `1px solid ${colors.border}`,
-                borderRadius: 8,
-                fontSize: 12,
-              }}
-              itemStyle={{ color: colors.text }}
-              formatter={(v) => [`R$ ${Number(v).toFixed(2)}`, '']}
-            />
-            <Legend
-              iconType="square"
-              iconSize={8}
-              formatter={(v) => <span style={{ fontSize: 12, color: colors.text }}>{v}</span>}
-            />
-          </PieChart>
-        </ResponsiveContainer>
+        <>
+          <ResponsiveContainer width="100%" height={200}>
+            <PieChart>
+              <Pie
+                data={data}
+                cx="50%"
+                cy="50%"
+                innerRadius={50}
+                outerRadius={80}
+                paddingAngle={2}
+                dataKey="value"
+                stroke={colors.surface}
+                strokeWidth={2}
+              >
+                {data.map((d) => (
+                  <Cell key={d.name} fill={d.color} />
+                ))}
+              </Pie>
+              <Tooltip
+                contentStyle={{
+                  background: colors.surface,
+                  border: `1px solid ${colors.border}`,
+                  borderRadius: 8,
+                  fontSize: 12,
+                }}
+                itemStyle={{ color: colors.text }}
+                formatter={(v) => [`R$ ${Number(v).toFixed(2)}`, '']}
+              />
+            </PieChart>
+          </ResponsiveContainer>
+
+          <ul className="mt-3 grid grid-cols-2 gap-x-6 gap-y-1.5 text-xs sm:grid-cols-3">
+            {data.map((d) => (
+              <li key={d.name} className="flex items-center gap-2 text-foreground-secondary">
+                <span
+                  data-swatch
+                  data-color={d.color}
+                  aria-hidden
+                  className="h-2.5 w-2.5 shrink-0 rounded-sm"
+                  style={{ backgroundColor: d.color }}
+                />
+                <span className="truncate">{d.name}</span>
+                <span className="ml-auto font-mono tabular-nums text-muted-foreground">{formatPct(d.value, total)}</span>
+              </li>
+            ))}
+          </ul>
+        </>
       )}
     </div>
   )

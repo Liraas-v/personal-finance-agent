@@ -11,7 +11,7 @@ Primeira versão publicada: redesign visual, UX por tela e infraestrutura do rep
 ### Adicionado
 - Tema claro e escuro (segue o sistema), com seletor no cabeçalho e em Configurações.
 - Tokens semânticos de cor, teste de contraste WCAG nos dois temas e teste que bloqueia cores hardcoded em `app/` e `components/`.
-- Dashboard com o saldo como número principal; legenda no gráfico de gastos vs receitas; categorias excedentes do gráfico de rosca agrupadas em "Outras".
+- Dashboard com o saldo como número principal; legenda no gráfico de gastos vs receitas; gráfico de rosca com uma cor fixa por categoria e legenda com o percentual de cada uma.
 - Menu "Mais" na navegação mobile (Insights, OCR, Configurações e tema).
 - Sugestões de pergunta no estado vazio do chat.
 - CI no GitHub Actions (lint, typecheck, testes e build), Dependabot, templates de PR e de issue.
