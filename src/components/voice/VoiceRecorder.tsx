@@ -8,11 +8,12 @@ import { useVoice } from '@/hooks/useVoice'
 import { useTransactions } from '@/hooks/useTransactions'
 import { parseVoiceInput } from '@/lib/parser'
 import { categorizeByKeyword } from '@/lib/categories'
+import { buildTransactionInputs } from '@/lib/voiceInputs'
 
 export function VoiceRecorder() {
   const [interim, setInterim] = useState('')
   const [showTranscript, setShowTranscript] = useState(false)
-  const { create } = useTransactions()
+  const { create, createMany } = useTransactions()
 
   const handleResult = async (transcript: string) => {
     setInterim('')
@@ -40,16 +41,10 @@ export function VoiceRecorder() {
       }
     }
 
-    await create({
-      tipo: parsed.tipo,
-      descricao: parsed.descricao,
-      valor: parsed.valor,
-      categoria,
-      pagamento: parsed.pagamento,
-      ...(parsed.parcelas ? { parcelas: parsed.parcelas } : {}),
-      data: new Date().toISOString().split('T')[0],
-      origem: 'voz',
-    })
+    // "Nike 4500 em 12x" vira 12 parcelas mensais; os demais casos são um único lançamento.
+    const lote = buildTransactionInputs(parsed, categoria, new Date().toISOString().split('T')[0], 'voz')
+    if (lote.length > 1) await createMany(lote)
+    else await create(lote[0])
   }
 
   const { isListening, isSupported, toggle } = useVoice({
