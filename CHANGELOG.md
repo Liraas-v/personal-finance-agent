@@ -4,31 +4,9 @@ Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/).
 
 ## [Unreleased]
 
-## [0.3.0] - 2026-10-05
+## [0.2.0] - 2026-10-05
 
-Parcelamento, categorias personalizadas, erros tipados da IA e testes E2E.
-
-### Adicionado
-- Compras parceladas: ao escolher "parcelado" o formulário pede o número de parcelas e a data da 1ª, mostra a prévia (ex.: "12x de R$ 375,00") e lança uma parcela por mês ("Nike (3/12)"). O valor informado é o total; o centavo de arredondamento fica na última parcela e dias 29 a 31 caem no último dia dos meses curtos. A voz também parcela ("nike 4500 em 12x").
-- Lançamento em lote com um único aviso, que para com segurança se alguma parcela falhar.
-- Editar e excluir todas as parcelas de uma compra: as parcelas passam a ter um identificador de grupo (`grupoParcelas`), e a lista mostra o botão "Parcelas" nas compras parceladas a partir de agora. O diálogo lista as parcelas e permite editar todas (novo total, número de parcelas, data da 1ª e descrição, com rateio de soma exata), excluir todas ou excluir só as futuras. Falha no meio de uma operação em grupo informa quantas parcelas foram afetadas. A exportação CSV ganha a coluna `grupo_parcelas`.
-- Categorias personalizadas: em Configurações dá para criar, renomear e remover categorias (até 12, além de "Outros", que é fixa). Renomear leva os lançamentos e o limite junto; remover pede para onde mover os lançamentos. Formulário, Metas, gráfico, categorização por palavra-chave e prompt da IA passam a usar a lista da configuração, e a IA só pode sugerir categorias que existem. A paleta do gráfico ganhou 4 cores (`--cat-9` a `--cat-12`), validadas por contraste e distinção nos dois temas. Configurações antigas, sem a lista, continuam com as 8 categorias de sempre.
-- Testes E2E com Playwright (17 testes: lançar gasto, parcelar, metas, tema, chat/insights, navegação mobile, parcelas em grupo e categorias) rodando em um job próprio do CI, com relógio fixo e IA simulada.
-
-### Alterado
-- Código-fonte movido para `src/` (`app`, `components`, `hooks`, `lib`, `services`, `types`); a raiz do repositório fica só com configuração, documentação e testes. Screenshots do README passam de `public/` para `docs/`.
-- Favicon e ícones do PWA próprios (gráfico em alta em azul-acinzentado, o mesmo traço do logo do cabeçalho), no lugar do ícone padrão do Next.js. Gerados por `npm run icons`; o manifest passa a incluir PNG de 192 e 512 px.
-- Falhas da IA deixam de ser engolidas: as rotas `/api/ai/*` devolvem 503, 504 ou 502 com o motivo (`missing_key`, `offline`, `timeout`, `http`, `invalid_response`) e a tela de insights mostra a causa. Sem IA, a análise de despesa (voz e formulário) degrada para a categoria "Outros".
-
-### Corrigido
-- Insights vazios e IA indisponível deixam de se confundir: os providers (Groq e Ollama) não devolvem mais lista vazia quando falham.
-
-### Removido
-- README em inglês e a pasta `uploads/` (o OCR usa o diretório temporário do sistema).
-
-## [0.2.0] - 2026-10-04
-
-Primeira versão publicada: redesign visual, UX por tela e infraestrutura do repositório.
+Primeira versão publicada: redesign visual, UX por tela, infraestrutura do repositório, parcelamento e parcelas em grupo, categorias personalizadas, erros tipados da IA e testes E2E.
 
 ### Adicionado
 - Tema claro e escuro (segue o sistema), com seletor no cabeçalho e em Configurações.
@@ -38,6 +16,11 @@ Primeira versão publicada: redesign visual, UX por tela e infraestrutura do rep
 - Sugestões de pergunta no estado vazio do chat.
 - CI no GitHub Actions (lint, typecheck, testes e build), Dependabot, templates de PR e de issue.
 - README, guia de contribuição e este changelog.
+- Compras parceladas: ao escolher "parcelado" o formulário pede o número de parcelas e a data da 1ª, mostra a prévia (ex.: "12x de R$ 375,00") e lança uma parcela por mês ("Nike (3/12)"). O valor informado é o total; o centavo de arredondamento fica na última parcela e dias 29 a 31 caem no último dia dos meses curtos. A voz também parcela ("nike 4500 em 12x").
+- Lançamento em lote com um único aviso, que para com segurança se alguma parcela falhar.
+- Editar e excluir todas as parcelas de uma compra: as parcelas passam a ter um identificador de grupo (`grupoParcelas`), e a lista mostra o botão "Parcelas" nas compras parceladas a partir de agora. O diálogo lista as parcelas e permite editar todas (novo total, número de parcelas, data da 1ª e descrição, com rateio de soma exata), excluir todas ou excluir só as futuras. Falha no meio de uma operação em grupo informa quantas parcelas foram afetadas. A exportação CSV ganha a coluna `grupo_parcelas`.
+- Categorias personalizadas: em Configurações dá para criar, renomear e remover categorias (até 12, além de "Outros", que é fixa). Renomear leva os lançamentos e o limite junto; remover pede para onde mover os lançamentos. Formulário, Metas, gráfico, categorização por palavra-chave e prompt da IA passam a usar a lista da configuração, e a IA só pode sugerir categorias que existem. A paleta do gráfico ganhou 4 cores (`--cat-9` a `--cat-12`), validadas por contraste e distinção nos dois temas. Configurações antigas, sem a lista, continuam com as 8 categorias de sempre.
+- Testes E2E com Playwright (17 testes: lançar gasto, parcelar, metas, tema, chat/insights, navegação mobile, parcelas em grupo e categorias) rodando em um job próprio do CI, com relógio fixo e IA simulada.
 
 ### Alterado
 - Visual limpo e minimalista: acento azul-acinzentado, fonte Geist, sem gradientes nem brilho. Cores dos gráficos passam a vir das variáveis CSS do tema.
@@ -50,13 +33,18 @@ Primeira versão publicada: redesign visual, UX por tela e infraestrutura do rep
 - Pacote renomeado para `personal-finance-agent`, com metadados completos.
 - Dependências atualizadas: Next 16.3, React 19.3, Recharts 3.10, Radix, Lucide, framer-motion 13, Vitest 5, jsdom 30, jest-dom 7, `@types/node` 22, `actions/checkout` e `actions/setup-node` v7.
 - Dependabot ignora o ESLint 10, o `@vitejs/plugin-react` 6.1+ e majors do `@types/node` até o ambiente acompanhar (motivos no `dependabot.yml`).
+- Código-fonte movido para `src/` (`app`, `components`, `hooks`, `lib`, `services`, `types`); a raiz do repositório fica só com configuração, documentação e testes. Screenshots do README passam de `public/` para `docs/`.
+- Favicon e ícones do PWA próprios (gráfico em alta em azul-acinzentado, o mesmo traço do logo do cabeçalho), no lugar do ícone padrão do Next.js. Gerados por `npm run icons`; o manifest passa a incluir PNG de 192 e 512 px.
+- Falhas da IA deixam de ser engolidas: as rotas `/api/ai/*` devolvem 503, 504 ou 502 com o motivo (`missing_key`, `offline`, `timeout`, `http`, `invalid_response`) e a tela de insights mostra a causa. Sem IA, a análise de despesa (voz e formulário) degrada para a categoria "Outros".
 
 ### Corrigido
 - Insights pediam para "adicionar transações" mesmo havendo dados: a geração agora espera as transações carregarem.
 - Meta de economia real em Configurações (mostrava 0) e carregada corretamente ao abrir a tela de metas.
 - Item em destaque do select e foco do campo do chat visíveis nos dois temas; hovers sem efeito; contraste dos botões ativos, do seletor de tema e das barras de progresso.
 - Erro de hidratação em Configurações (status de voz) e erros de tipo em `tests/lib/currency.test.ts`.
+- Insights vazios e IA indisponível deixam de se confundir: os providers (Groq e Ollama) não devolvem mais lista vazia quando falham.
 
 ### Removido
 - Barra lateral "Resumo financeiro" do chat (repetia o dashboard).
 - Dependência `@types/uuid` (o `uuid` já traz os tipos).
+- README em inglês e a pasta `uploads/` (o OCR usa o diretório temporário do sistema).
