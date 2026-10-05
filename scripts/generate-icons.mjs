@@ -6,11 +6,23 @@
 import { chromium } from 'playwright'
 import { writeFileSync } from 'fs'
 
-const ACCENT = '#4a6785'
+// Mesmas cores do logo do cabeçalho (--primary / --primary-foreground de src/app/globals.css):
+// tema claro = azul médio com glifo branco; tema escuro = azul claro com glifo escuro.
+const LIGHT = { bg: '#4a6785', fg: '#ffffff' }
+const DARK = { bg: '#8fa8c2', fg: '#0f1114' }
 
-const svg = (rx) => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <rect width="32" height="32" rx="${rx}" fill="${ACCENT}"/>
-  <g transform="translate(4 4)" fill="none" stroke="#ffffff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+const svg = (rx, { adaptive = false } = {}) => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">${
+  adaptive
+    ? `
+  <style>
+    .bg { fill: ${LIGHT.bg} }
+    .fg { stroke: ${LIGHT.fg} }
+    @media (prefers-color-scheme: dark) { .bg { fill: ${DARK.bg} } .fg { stroke: ${DARK.fg} } }
+  </style>`
+    : ''
+}
+  <rect${adaptive ? ' class="bg"' : ` fill="${LIGHT.bg}"`} width="32" height="32" rx="${rx}"/>
+  <g${adaptive ? ' class="fg"' : ` stroke="${LIGHT.fg}"`} transform="translate(4 4)" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
     <path d="M16 7h6v6"/>
     <path d="m22 7-8.5 8.5-5-5L2 17"/>
   </g>
@@ -21,7 +33,9 @@ const svg = (rx) => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"
 const rounded = svg(7)
 const square = svg(0)
 
-writeFileSync('public/icon.svg', rounded)
+// O SVG do navegador acompanha o esquema de cores do sistema, como o logo do cabeçalho.
+// Os PNG e o .ico são estáticos (versão clara).
+writeFileSync('public/icon.svg', svg(7, { adaptive: true }))
 
 const browser = await chromium.launch({ channel: process.env.PW_CHANNEL || undefined })
 const page = await browser.newPage()
