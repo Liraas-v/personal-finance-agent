@@ -1,4 +1,4 @@
-import { ALL_CATEGORIES } from '@/lib/categories'
+import { CATEGORIAS_PADRAO } from '@/lib/customCategories'
 
 export interface ChartColors {
   primary: string
@@ -8,7 +8,7 @@ export interface ChartColors {
   surface: string
   border: string
   text: string
-  /** Uma cor por categoria conhecida, na ordem de ALL_CATEGORIES sem "Outros" (--cat-1 … --cat-8). */
+  /** Uma cor por posição na lista de categorias, sem "Outros" (--cat-1 … --cat-12). */
   categories: string[]
 }
 
@@ -21,10 +21,11 @@ export const FALLBACK_CHART_COLORS: ChartColors = {
   surface: '#17181b',
   border: '#2a2c31',
   text: '#b4b7be',
-  categories: ['#f0993a', '#5b9bd5', '#62b857', '#b987c9', '#ee7fb2', '#54c1b8', '#e3c63f', '#ee5d58'],
+  categories: [
+    '#f0993a', '#5b9bd5', '#62b857', '#b987c9', '#ee7fb2', '#54c1b8', '#e3c63f', '#ee5d58',
+    '#e1b598', '#5f5fdd', '#b7c07c', '#cc5fdd',
+  ],
 }
-
-const CATEGORIAS_COM_COR = ALL_CATEGORIES.filter((c) => c !== 'Outros')
 
 export function readChartColors(el: Element): ChartColors {
   const style = getComputedStyle(el)
@@ -42,9 +43,11 @@ export function readChartColors(el: Element): ChartColors {
   }
 }
 
-// A cor depende do NOME da categoria, não da posição na lista: "Alimentação" é sempre a mesma cor,
-// em qualquer gráfico, com 3 ou com 8 categorias à mostra. "Outros" e nomes desconhecidos ficam neutros.
-export function categoryColor(colors: ChartColors, name: string): string {
-  const i = CATEGORIAS_COM_COR.indexOf(name)
-  return i === -1 ? colors.neutral : colors.categories[i]
+// A cor segue a POSIÇÃO da categoria na lista (sem "Outros"): com a lista padrão, "Alimentação" é sempre
+// a 1ª cor, "Transporte" a 2ª etc. Categorias criadas recebem as cores 9 a 12. Limitação conhecida:
+// remover uma categoria do meio faz as seguintes subirem uma posição (e mudarem de cor). "Outros",
+// nomes fora da lista e posições além de --cat-12 ficam neutros.
+export function categoryColor(colors: ChartColors, name: string, categorias: string[] = CATEGORIAS_PADRAO): string {
+  const i = categorias.filter((c) => c !== 'Outros').indexOf(name)
+  return i === -1 || i >= colors.categories.length ? colors.neutral : colors.categories[i]
 }
