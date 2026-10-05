@@ -1,3 +1,5 @@
+import { ALL_CATEGORIES } from '@/lib/categories'
+
 export interface ChartColors {
   primary: string
   neutral: string
@@ -6,6 +8,7 @@ export interface ChartColors {
   surface: string
   border: string
   text: string
+  /** Uma cor por categoria conhecida, na ordem de ALL_CATEGORIES sem "Outros" (--cat-1 … --cat-8). */
   categories: string[]
 }
 
@@ -18,8 +21,10 @@ export const FALLBACK_CHART_COLORS: ChartColors = {
   surface: '#17181b',
   border: '#2a2c31',
   text: '#b4b7be',
-  categories: ['#c3d0de', '#a9bbcf', '#8fa8c2', '#7790ab', '#657d97', '#5a7289'],
+  categories: ['#f0993a', '#5b9bd5', '#62b857', '#b987c9', '#ee7fb2', '#54c1b8', '#e3c63f', '#ee5d58'],
 }
+
+const CATEGORIAS_COM_COR = ALL_CATEGORIES.filter((c) => c !== 'Outros')
 
 export function readChartColors(el: Element): ChartColors {
   const style = getComputedStyle(el)
@@ -37,19 +42,9 @@ export function readChartColors(el: Element): ChartColors {
   }
 }
 
-export function categoryColor(colors: ChartColors, index: number): string {
-  return colors.categories[Math.min(Math.max(index, 0), colors.categories.length - 1)]
-}
-
-// O donut só tem 6 tons distintos: as categorias além disso viram uma fatia "Outras",
-// em vez de repetir a mesma cor em fatias diferentes.
-export function groupTopCategories(
-  entries: { name: string; value: number }[],
-  max: number,
-): { name: string; value: number }[] {
-  const sorted = [...entries].sort((a, b) => b.value - a.value)
-  if (sorted.length <= max) return sorted
-  const top = sorted.slice(0, max - 1)
-  const rest = sorted.slice(max - 1).reduce((sum, e) => sum + e.value, 0)
-  return [...top, { name: 'Outras', value: rest }]
+// A cor depende do NOME da categoria, não da posição na lista: "Alimentação" é sempre a mesma cor,
+// em qualquer gráfico, com 3 ou com 8 categorias à mostra. "Outros" e nomes desconhecidos ficam neutros.
+export function categoryColor(colors: ChartColors, name: string): string {
+  const i = CATEGORIAS_COM_COR.indexOf(name)
+  return i === -1 ? colors.neutral : colors.categories[i]
 }

@@ -29,12 +29,15 @@
 
   --chart-primary: var(--primary);
   --chart-neutral: #858a94;
-  --cat-1: #2f4a66;
-  --cat-2: #3f5d7c;
-  --cat-3: #51708f;
-  --cat-4: #62819f;
-  --cat-5: #7392af;
-  --cat-6: #829fb9;
+  /* Uma cor fixa por categoria (ordem de ALL_CATEGORIES); "Outros" usa --chart-neutral */
+  --cat-1: #c2600a; /* Alimentação */
+  --cat-2: #3a6ea5; /* Transporte */
+  --cat-3: #3f8a36; /* Saúde */
+  --cat-4: #8a5a9a; /* Assinaturas */
+  --cat-5: #c93a86; /* Compras */
+  --cat-6: #23857f; /* Moradia */
+  --cat-7: #8c7a00; /* Educação */
+  --cat-8: #c4302b; /* Lazer */
 
   /* aliases shadcn: components/ui/* herdam o tema sem reescrita */
   --popover: var(--card);
@@ -73,12 +76,14 @@
   --scrim: rgb(0 0 0 / 0.6);
 
   --chart-neutral: #6b707a;
-  --cat-1: #c3d0de;
-  --cat-2: #a9bbcf;
-  --cat-3: #8fa8c2;
-  --cat-4: #7790ab;
-  --cat-5: #657d97;
-  --cat-6: #5a7289;
+  --cat-1: #f0993a;
+  --cat-2: #5b9bd5;
+  --cat-3: #62b857;
+  --cat-4: #b987c9;
+  --cat-5: #ee7fb2;
+  --cat-6: #54c1b8;
+  --cat-7: #e3c63f;
+  --cat-8: #ee5d58;
 }
 
 @theme inline {
