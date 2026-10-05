@@ -35,7 +35,7 @@ A troca é feita por interfaces `TransactionRepository`/`ConfigRepository` (`src
 
 ## Funcionalidades
 
-- **Transações:** adicione gastos e receitas por texto, voz ou foto de recibo (OCR); edite, remova, busque e filtre por período. A categorização é feita por IA, com fallback por palavras-chave.
+- **Transações:** adicione gastos e receitas por texto, voz ou foto de recibo (OCR); edite, remova, busque e filtre por período. A categorização é feita por IA, com fallback por palavras-chave. Compras **parceladas** (ex.: 12x, também por voz) são divididas em lançamentos mensais, com a data da 1ª parcela e o valor total rateado em centavos exatos.
 - **Dashboard:** saldo do período em destaque, receitas, gastos e progresso da meta; gráfico de gastos vs receitas, gastos por categoria e resumo gerado por IA.
 - **Metas:** meta de economia mensal e limites por categoria, com alertas visuais acima de 80% e de 100%.
 - **Insights e chat financeiro:** análise do período pela IA e conversa com contexto financeiro opcional.
