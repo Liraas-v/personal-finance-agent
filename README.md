@@ -151,8 +151,12 @@ A suíte cobre funções puras, repositórios, `AIProvider`, rotas de API e comp
 - [x] Redesign visual com tema claro e escuro
 - [x] CI e documentação
 - [x] Reorganização de UX por tela (metas, transações, chat, insights, mobile)
-- [ ] Categorias personalizadas
-- [ ] Testes end-to-end
+- [x] Compras parceladas em lançamentos mensais ([#22](https://github.com/Liraas-v/personal-finance-agent/pull/22))
+- [ ] Testes end-to-end no CI ([#23](https://github.com/Liraas-v/personal-finance-agent/issues/23))
+- [ ] Editar e excluir todas as parcelas de uma compra ([#24](https://github.com/Liraas-v/personal-finance-agent/issues/24))
+- [ ] Categorias personalizadas ([#25](https://github.com/Liraas-v/personal-finance-agent/issues/25))
+- [ ] Erros da IA tipados, distinguindo falha de resultado vazio ([#26](https://github.com/Liraas-v/personal-finance-agent/issues/26))
+- [ ] Primeira release publicada ([#28](https://github.com/Liraas-v/personal-finance-agent/issues/28))
 
 ## Limitações conhecidas
 
