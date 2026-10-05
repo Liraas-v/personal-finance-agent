@@ -18,7 +18,7 @@ Primeira versão publicada: redesign visual, UX por tela e infraestrutura do rep
 - Menu "Mais" na navegação mobile (Insights, OCR, Configurações e tema).
 - Sugestões de pergunta no estado vazio do chat.
 - CI no GitHub Actions (lint, typecheck, testes e build), Dependabot, templates de PR e de issue.
-- README em português e inglês, guia de contribuição e este changelog.
+- README, guia de contribuição e este changelog.
 
 ### Alterado
 - Visual limpo e minimalista: acento azul-acinzentado, fonte Geist, sem gradientes nem brilho. Cores dos gráficos passam a vir das variáveis CSS do tema.

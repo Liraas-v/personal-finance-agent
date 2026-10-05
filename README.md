@@ -1,6 +1,5 @@
 # Personal Finance Agent
 
-**Português** · [English](README.en.md)
 
 [![CI](https://github.com/Liraas-v/personal-finance-agent/actions/workflows/ci.yml/badge.svg)](https://github.com/Liraas-v/personal-finance-agent/actions/workflows/ci.yml)
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
@@ -147,7 +146,7 @@ A suíte cobre funções puras, repositórios, `AIProvider`, rotas de API e comp
 ## Roadmap
 
 - [x] Redesign visual com tema claro e escuro
-- [x] CI e documentação bilíngue
+- [x] CI e documentação
 - [x] Reorganização de UX por tela (metas, transações, chat, insights, mobile)
 - [ ] Categorias personalizadas
 - [ ] Testes end-to-end
