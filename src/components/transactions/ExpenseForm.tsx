@@ -2,6 +2,7 @@
 import { useId, useState } from 'react'
 import { PlusCircle, Save } from 'lucide-react'
 import { motion } from 'framer-motion'
+import { v4 as uuidv4 } from 'uuid'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -75,7 +76,13 @@ export function ExpenseForm({ defaultValues, origem = 'manual', transaction, onD
       }
       let lote
       try {
-        lote = splitInstallments({ total: valorNumerico, parcelas: nParcelas, primeiraData: data, descricao })
+        lote = splitInstallments({
+          total: valorNumerico,
+          parcelas: nParcelas,
+          primeiraData: data,
+          descricao,
+          grupoParcelas: uuidv4(),
+        })
       } catch {
         setErro('Confira o valor total e a data da 1ª parcela.')
         return
@@ -90,6 +97,7 @@ export function ExpenseForm({ defaultValues, origem = 'manual', transaction, onD
           categoria,
           pagamento,
           parcelas: p.parcelas,
+          grupoParcelas: p.grupoParcelas,
           data: p.data,
           origem,
         }))
