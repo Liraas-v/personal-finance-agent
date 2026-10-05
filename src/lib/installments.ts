@@ -5,6 +5,8 @@ export interface Installment {
   valor: number
   data: string
   parcelas: number
+  /** Identificador da compra, quando informado em `splitInstallments` (só em compras de 2+ parcelas). */
+  grupoParcelas?: string
 }
 
 interface SplitInput {
@@ -14,6 +16,8 @@ interface SplitInput {
   /** Data da 1ª parcela (aaaa-mm-dd). As demais caem nos meses seguintes. */
   primeiraData: string
   descricao: string
+  /** Id que liga as parcelas da mesma compra; gerado por quem chama. */
+  grupoParcelas?: string
 }
 
 function diasNoMes(ano: number, mes: number): number {
@@ -37,7 +41,7 @@ function somarMeses(iso: string, meses: number): string {
  * Divide uma compra parcelada em lançamentos mensais. Trabalha em centavos inteiros para a soma
  * das parcelas ser exatamente o total: o resto da divisão fica na última parcela.
  */
-export function splitInstallments({ total, parcelas, primeiraData, descricao }: SplitInput): Installment[] {
+export function splitInstallments({ total, parcelas, primeiraData, descricao, grupoParcelas }: SplitInput): Installment[] {
   if (!Number.isInteger(parcelas) || parcelas < 1 || parcelas > MAX_PARCELAS) {
     throw new RangeError(`Número de parcelas inválido: ${parcelas}`)
   }
@@ -60,5 +64,6 @@ export function splitInstallments({ total, parcelas, primeiraData, descricao }: 
     valor: (i === parcelas - 1 ? base + resto : base) / 100,
     data: somarMeses(primeiraData, i),
     parcelas,
+    ...(grupoParcelas ? { grupoParcelas } : {}),
   }))
 }

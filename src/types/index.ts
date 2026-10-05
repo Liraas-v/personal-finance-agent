@@ -10,6 +10,8 @@ export interface Transaction {
   categoria: string
   pagamento: FormaPagamento
   parcelas?: number
+  /** Liga as parcelas de uma mesma compra. Ausente em lançamentos antigos e em compras à vista. */
+  grupoParcelas?: string
   data: string
   origem: OrigemTransacao
   createdAt: string
