@@ -55,4 +55,13 @@ describe('OllamaProvider — falhas tipadas', () => {
     fetchMock.mockResolvedValue({ ok: false, status: 500, json: async () => ({}) })
     await expect((await provider()).analyzeExpense('x 10')).rejects.toMatchObject({ reason: 'http' })
   })
+
+  it('o prompt lista exatamente as categorias recebidas', async () => {
+    fetchMock.mockResolvedValue(resposta('{"categoria":"Pets","descricao":"x","pagamento":"pix"}'))
+    await (await provider()).analyzeExpense('x 10', ['Pets', 'Outros'])
+    const [, options] = fetchMock.mock.calls[0] as [string, RequestInit]
+    const p = JSON.parse(options.body as string).prompt as string
+    expect(p).toContain('Categorias válidas: Pets, Outros.')
+    expect(p).not.toContain('Lazer')
+  })
 })

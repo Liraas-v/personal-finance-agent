@@ -8,6 +8,8 @@ import { useVoice } from '@/hooks/useVoice'
 import { useTransactions } from '@/hooks/useTransactions'
 import { parseVoiceInput } from '@/lib/parser'
 import { categorizeByKeyword } from '@/lib/categories'
+import { getCategorias } from '@/lib/customCategories'
+import { useFinanceStore } from '@/lib/store'
 import { buildTransactionInputs } from '@/lib/voiceInputs'
 
 export function VoiceRecorder() {
@@ -26,13 +28,14 @@ export function VoiceRecorder() {
     }
 
     // Categorize: keyword first, Ollama fallback
-    let categoria = categorizeByKeyword(parsed.descricao)
+    const categorias = getCategorias(useFinanceStore.getState().config)
+    let categoria = categorizeByKeyword(parsed.descricao, categorias)
     if (categoria === 'Outros') {
       try {
         const res = await fetch('/api/ai/analyze', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ text: transcript }),
+          body: JSON.stringify({ text: transcript, categorias }),
         })
         const data = await res.json()
         if (data.categoria) categoria = data.categoria

@@ -21,7 +21,7 @@ export function getCategorias(config: ComCategorias): string[] {
   return [...editaveis(config), OUTROS]
 }
 
-function normalizar(nome: string): string {
+export function normalizar(nome: string): string {
   return nome
     .normalize('NFD')
     .replace(/[̀-ͯ]/g, '')
@@ -68,4 +68,14 @@ export function remover(config: Config, nome: string): Config {
   const limites = { ...config.limitesPorCategoria }
   delete limites[nome]
   return { ...config, categorias: lista.filter((c) => c !== nome), limitesPorCategoria: limites }
+}
+
+/**
+ * Garante que a categoria sugerida (pela IA, por exemplo) existe: devolve o nome canônico da lista
+ * (ignorando caixa e acentos) ou "Outros" quando ela não existe.
+ */
+export function normalizarCategoria(sugerida: unknown, validas: string[]): string {
+  if (typeof sugerida !== 'string') return OUTROS
+  const chave = normalizar(sugerida)
+  return validas.find((v) => normalizar(v) === chave) ?? OUTROS
 }

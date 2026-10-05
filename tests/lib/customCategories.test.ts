@@ -6,6 +6,7 @@ import {
   getCategorias,
   remover,
   renomear,
+  normalizarCategoria,
   validarNome,
 } from '@/lib/customCategories'
 import { ALL_CATEGORIES } from '@/lib/categories'
@@ -141,3 +142,19 @@ describe('MAX_CATEGORIAS', () => {
     expect(MAX_CATEGORIAS).toBe(12)
   })
 })
+
+describe('normalizarCategoria', () => {
+  const validas = ['Alimentação', 'Pets', 'Outros']
+
+  it('devolve o nome canônico ignorando caixa e acentos', () => {
+    expect(normalizarCategoria('alimentacao', validas)).toBe('Alimentação')
+    expect(normalizarCategoria(' PETS ', validas)).toBe('Pets')
+  })
+
+  it('categoria que não existe, ou valor que não é texto, vira "Outros"', () => {
+    expect(normalizarCategoria('Lazer', validas)).toBe('Outros')
+    expect(normalizarCategoria(undefined, validas)).toBe('Outros')
+    expect(normalizarCategoria(42, validas)).toBe('Outros')
+  })
+})
+

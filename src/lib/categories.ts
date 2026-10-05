@@ -61,10 +61,12 @@ const CATEGORY_MAP: Record<string, string> = {
 // Sort by key length descending so multi-word keywords match before single words
 const SORTED_ENTRIES = Object.entries(CATEGORY_MAP).sort(([a], [b]) => b.length - a.length)
 
-export function categorizeByKeyword(text: string): string {
+// `validas`: categorias que existem para o usuário. Uma palavra-chave só pode sugerir uma delas;
+// se a categoria encontrada foi removida, cai em "Outros".
+export function categorizeByKeyword(text: string, validas?: string[]): string {
   const lower = text.toLowerCase()
   for (const [keyword, category] of SORTED_ENTRIES) {
-    if (lower.includes(keyword)) return category
+    if (lower.includes(keyword)) return !validas || validas.includes(category) ? category : 'Outros'
   }
   return 'Outros'
 }

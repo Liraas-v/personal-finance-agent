@@ -30,3 +30,26 @@ describe('categorizeByKeyword', () => {
     expect(ALL_CATEGORIES).toHaveLength(9)
   })
 })
+
+describe('categorizeByKeyword — categorias válidas do usuário', () => {
+  const validas = ['Alimentação', 'Transporte', 'Pets', 'Outros']
+
+  it('sem a lista, o comportamento é o de sempre', () => {
+    expect(categorizeByKeyword('cinema')).toBe('Lazer')
+    expect(categorizeByKeyword('Uber')).toBe('Transporte')
+  })
+
+  it('categoria encontrada que não existe mais cai em "Outros"', () => {
+    expect(categorizeByKeyword('cinema', validas)).toBe('Outros')
+  })
+
+  it('categoria encontrada que existe é mantida', () => {
+    expect(categorizeByKeyword('Uber', validas)).toBe('Transporte')
+    expect(categorizeByKeyword('ifood', validas)).toBe('Alimentação')
+  })
+
+  it('texto desconhecido continua "Outros"', () => {
+    expect(categorizeByKeyword('xyzabc', validas)).toBe('Outros')
+  })
+})
+
