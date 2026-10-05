@@ -1,6 +1,5 @@
 # Personal Finance Agent
 
-
 [![CI](https://github.com/Liraas-v/personal-finance-agent/actions/workflows/ci.yml/badge.svg)](https://github.com/Liraas-v/personal-finance-agent/actions/workflows/ci.yml)
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js&logoColor=white)](https://nextjs.org)
@@ -14,8 +13,8 @@
 **[→ Ver demo ao vivo](https://finance-agent-blue.vercel.app)**
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="public/screenshots/dashboard-dark.png">
-  <img src="public/screenshots/dashboard-light.png" alt="Dashboard do Personal Finance Agent com o saldo do período em destaque">
+  <source media="(prefers-color-scheme: dark)" srcset="docs/screenshots/dashboard-dark.png">
+  <img src="docs/screenshots/dashboard-light.png" alt="Dashboard do Personal Finance Agent com o saldo do período em destaque">
 </picture>
 
 ## O problema
@@ -47,9 +46,9 @@ A troca é feita por interfaces `TransactionRepository`/`ConfigRepository` (`lib
 
 ## Screenshots
 
-![Transações](public/screenshots/transacoes.png)
-![Chat financeiro](public/screenshots/chat.png)
-![OCR de comprovantes](public/screenshots/ocr.png)
+![Transações](docs/screenshots/transacoes.png)
+![Chat financeiro](docs/screenshots/chat.png)
+![OCR de comprovantes](docs/screenshots/ocr.png)
 
 ## Stack
 
@@ -115,7 +114,8 @@ lib/            lógica pura, tokens de gráfico e repositories/ (JSON local, AP
 services/ai/    AIProvider (Ollama e Groq) e construção de prompts
 tests/          testes unitários, de componentes e de API
 scripts/        utilitários (captura de screenshots)
-public/         ícone, manifest, service worker e screenshots
+public/         ícone, manifest e service worker
+docs/           screenshots usados neste README
 ```
 
 ## Testes e CI
