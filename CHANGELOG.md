@@ -4,6 +4,9 @@ Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/).
 
 ## [Unreleased]
 
+### Corrigido
+- Favicon acompanha o esquema de cores do sistema, como o logo do cabeçalho: azul médio com glifo branco no claro, azul claro com glifo escuro no escuro. O `<link>` do SVG passa a declarar `sizes="any"`, o que faz o Chrome preferir o SVG ao `.ico` estático. Os PNG e o `.ico` (usados por Safari e na instalação do PWA) continuam na versão clara.
+
 ## [0.2.0] - 2026-10-05
 
 Primeira versão publicada: redesign visual, UX por tela, infraestrutura do repositório, parcelamento e parcelas em grupo, categorias personalizadas, erros tipados da IA e testes E2E.
