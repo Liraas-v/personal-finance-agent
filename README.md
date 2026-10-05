@@ -19,7 +19,7 @@
 
 ## O problema
 
-Ferramentas de gestão financeira pessoal quase sempre exigem enviar os seus dados bancários para a nuvem de terceiros. Este projeto nasceu como o oposto disso: um agente que roda inteiramente na sua máquina (dados em JSON local, IA via Ollama), sem nenhuma chamada de rede para fora do seu computador.
+Ferramentas de gestão financeira pessoal quase sempre exigem enviar os seus dados bancários para a nuvem de terceiros. Este projeto nasceu como o oposto disso: um agente que roda na sua máquina: os dados ficam em JSON local e a IA roda via Ollama, sem enviar nada seu para a nuvem. A única chamada externa do modo self-hosted é o OCR, que baixa o modelo de idioma português do Tesseract (de uma CDN pública, o jsDelivr) na primeira vez que é usado; o conteúdo dos recibos não sai da sua máquina.
 
 ## Decisão de arquitetura: self-hosted vs. demo
 
@@ -35,8 +35,9 @@ A troca é feita por interfaces `TransactionRepository`/`ConfigRepository` (`src
 
 ## Funcionalidades
 
-- **Transações:** adicione gastos e receitas por texto, voz ou foto de recibo (OCR); edite, remova, busque e filtre por período. A categorização é feita por IA, com fallback por palavras-chave. Compras **parceladas** (ex.: 12x, também por voz) são divididas em lançamentos mensais, com a data da 1ª parcela e o valor total rateado em centavos exatos.
+- **Transações:** adicione gastos e receitas por texto, voz ou foto de recibo (OCR); edite, remova, busque e filtre por período. A categorização é feita por IA, com fallback por palavras-chave. Compras **parceladas** (ex.: 12x, também por voz) são divididas em lançamentos mensais, com a data da 1ª parcela e o valor total rateado em centavos exatos. Pela lista dá para **editar, excluir ou excluir só as parcelas futuras** de uma compra de uma vez.
 - **Dashboard:** saldo do período em destaque, receitas, gastos e progresso da meta; gráfico de gastos vs receitas, gastos por categoria e resumo gerado por IA.
+- **Categorias personalizadas:** crie, renomeie e remova categorias (até 12, além de "Outros"). Renomear leva os lançamentos e o limite junto, remover pede para onde mover os lançamentos, e cada categoria tem uma cor própria nos gráficos. A IA só sugere categorias que existem.
 - **Metas:** meta de economia mensal e limites por categoria, com alertas visuais acima de 80% e de 100%.
 - **Insights e chat financeiro:** análise do período pela IA e conversa com contexto financeiro opcional.
 - **OCR e voz:** upload de foto ou PDF de recibo (Tesseract.js) e entrada e saída por voz (Web Speech API).
@@ -49,6 +50,8 @@ A troca é feita por interfaces `TransactionRepository`/`ConfigRepository` (`src
 ![Transações](docs/screenshots/transacoes.png)
 ![Chat financeiro](docs/screenshots/chat.png)
 ![OCR de comprovantes](docs/screenshots/ocr.png)
+![Gerenciamento das parcelas de uma compra](docs/screenshots/parcelas.png)
+![Categorias personalizadas](docs/screenshots/categorias.png)
 
 ## Stack
 
@@ -147,21 +150,10 @@ A suíte cobre funções puras, repositórios, `AIProvider`, rotas de API e comp
 | POST | `/api/ai/insights` | Gera insights financeiros |
 | POST | `/api/ocr` | Extrai dados de imagem ou PDF |
 
-## Roadmap
-
-- [x] Redesign visual com tema claro e escuro
-- [x] CI e documentação
-- [x] Reorganização de UX por tela (metas, transações, chat, insights, mobile)
-- [x] Compras parceladas em lançamentos mensais ([#22](https://github.com/Liraas-v/personal-finance-agent/pull/22))
-- [x] Testes end-to-end no CI ([#23](https://github.com/Liraas-v/personal-finance-agent/issues/23))
-- [x] Editar e excluir todas as parcelas de uma compra ([#24](https://github.com/Liraas-v/personal-finance-agent/issues/24))
-- [x] Categorias personalizadas ([#25](https://github.com/Liraas-v/personal-finance-agent/issues/25))
-- [x] Erros da IA tipados, distinguindo falha de resultado vazio ([#26](https://github.com/Liraas-v/personal-finance-agent/issues/26))
-- [ ] Primeira release publicada ([#28](https://github.com/Liraas-v/personal-finance-agent/issues/28))
-
 ## Limitações conhecidas
 
 - **Web Speech API:** só funciona em Chrome/Edge, em `localhost` ou HTTPS.
+- **OCR:** precisa de internet na primeira vez para baixar o modelo de idioma (português). A leitura é feita no servidor local, não no navegador.
 - **Chat:** o histórico não persiste entre recarregamentos (por design).
 - **Demo pública:** os dados vivem só no seu navegador; limpar o `localStorage` volta ao seed inicial.
 
