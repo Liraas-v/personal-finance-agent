@@ -8,7 +8,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { useTransactions } from '@/hooks/useTransactions'
 import { useFinanceStore } from '@/lib/store'
-import { ALL_CATEGORIES } from '@/lib/categories'
+import { getCategorias } from '@/lib/customCategories'
 import { formatCurrency } from '@/lib/currency'
 import { MAX_PARCELAS, splitInstallments } from '@/lib/installments'
 import type { Transaction, TipoTransacao, FormaPagamento, OrigemTransacao } from '@/types'
@@ -30,6 +30,7 @@ const MSG_PARCELAS = `Informe de ${MIN_PARCELAS} a ${MAX_PARCELAS} parcelas.`
 export function ExpenseForm({ defaultValues, origem = 'manual', transaction, onDone }: ExpenseFormProps) {
   const { create, createMany, update } = useTransactions()
   const moeda = useFinanceStore((s) => s.config?.moeda ?? 'BRL')
+  const categorias = getCategorias(useFinanceStore((s) => s.config))
   const isEditing = transaction !== undefined
   const today = new Date().toISOString().split('T')[0]
   const uid = useId()
@@ -189,7 +190,8 @@ export function ExpenseForm({ defaultValues, origem = 'manual', transaction, onD
             onChange={(e) => setCategoria(e.target.value)}
             className="mt-1 w-full h-8 bg-muted border border-border-strong rounded-md text-foreground text-xs px-2"
           >
-            {ALL_CATEGORIES.map((c) => <option key={c}>{c}</option>)}
+            {/* uma categoria que já não existe (dado antigo) continua aparecendo, para a edição não trocá-la sem avisar */}
+            {(categorias.includes(categoria) ? categorias : [...categorias, categoria]).map((c) => <option key={c}>{c}</option>)}
           </select>
         </div>
         <div>

@@ -10,7 +10,7 @@ import { useFinanceStore } from '@/lib/store'
 import { getConfigRepository } from '@/lib/repositories'
 import { useShallow } from 'zustand/react/shallow'
 import { useTransactions } from '@/hooks/useTransactions'
-import { ALL_CATEGORIES } from '@/lib/categories'
+import { getCategorias } from '@/lib/customCategories'
 import { formatCurrency } from '@/lib/currency'
 import { limitStatus } from '@/lib/limits'
 import { cn } from '@/lib/utils'
@@ -130,7 +130,7 @@ export function GoalsPanel() {
       <div className="bg-card border border-border rounded-lg p-5">
         <h3 className="text-sm font-semibold text-foreground mb-4">Limites por Categoria</h3>
         <ul className="space-y-3">
-          {ALL_CATEGORIES.filter((c) => c !== 'Outros').map((cat, i) => {
+          {getCategorias(config).filter((c) => c !== 'Outros').map((cat, i) => {
             const spent = porCategoria[cat] ?? 0
             const limit = limits[cat] ?? 0
             const { status, pct } = limitStatus(spent, limit)
