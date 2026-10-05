@@ -10,6 +10,7 @@ export type InsightsStatus = 'idle' | 'loading' | 'ready' | 'empty' | 'error'
 export function useInsights() {
   const [insights, setInsights] = useState<Insight[]>([])
   const [status, setStatus] = useState<InsightsStatus>('idle')
+  const [reason, setReason] = useState<string | undefined>()
   const { transactions, totalGastos, totalReceitas, saldo, porCategoria } = useTransactions()
   const moeda = useFinanceStore((s) => s.config?.moeda ?? 'BRL')
 
@@ -20,6 +21,7 @@ export function useInsights() {
       return
     }
     setStatus('loading')
+    setReason(undefined)
 
     const dates = transactions.map((t) => t.data).sort()
     const summary: TransactionSummary = {
@@ -37,7 +39,11 @@ export function useInsights() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ summary }),
       })
-      if (!res.ok) throw new Error(`HTTP ${res.status}`)
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}))
+        setReason(typeof body?.reason === 'string' ? body.reason : undefined)
+        throw new Error(`HTTP ${res.status}`)
+      }
       const data = await res.json()
       const texts: string[] = data.insights ?? []
 
@@ -56,5 +62,5 @@ export function useInsights() {
     }
   }, [transactions, totalGastos, totalReceitas, saldo, porCategoria, moeda])
 
-  return { insights, status, loading: status === 'loading', generate }
+  return { insights, status, reason, loading: status === 'loading', generate }
 }

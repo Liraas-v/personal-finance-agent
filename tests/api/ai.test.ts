@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import type { NextRequest } from 'next/server'
+import { AIProviderError } from '@/services/ai/errors'
 
 const mockProvider = {
   chat: vi.fn(),
@@ -30,12 +31,62 @@ describe('rotas de IA', () => {
     expect(await res.json()).toEqual({ reply: 'Você está indo bem!' })
   })
 
-  it('POST /api/ai/chat retorna 503 quando o provider falha', async () => {
+  it('POST /api/ai/chat usa o mesmo mapeamento de falhas (timeout → 504)', async () => {
+    mockProvider.chat.mockRejectedValue(new AIProviderError('timeout', 'x'))
+    const { POST } = await import('@/app/api/ai/chat/route')
+
+    const res = await POST(makeRequest({ message: 'Como estou indo?' }))
+    expect(res.status).toBe(504)
+    expect(await res.json()).toMatchObject({ reason: 'timeout' })
+  })
+
+  it('POST /api/ai/chat com erro genérico vira 502 (invalid_response)', async () => {
     mockProvider.chat.mockRejectedValue(new Error('offline'))
     const { POST } = await import('@/app/api/ai/chat/route')
 
     const res = await POST(makeRequest({ message: 'Como estou indo?' }))
-    expect(res.status).toBe(503)
+    expect(res.status).toBe(502)
+  })
+
+  it('POST /api/ai/insights devolve o status e o motivo da falha (nunca 200 com lista vazia)', async () => {
+    const casos: [ConstructorParameters<typeof AIProviderError>[0], number][] = [
+      ['missing_key', 503],
+      ['offline', 503],
+      ['timeout', 504],
+      ['http', 502],
+      ['invalid_response', 502],
+    ]
+    const { POST } = await import('@/app/api/ai/insights/route')
+    for (const [reason, status] of casos) {
+      mockProvider.generateInsights.mockRejectedValueOnce(new AIProviderError(reason, 'x'))
+      const res = await POST(makeRequest({ summary: {} }))
+      expect(res.status, reason).toBe(status)
+      expect(await res.json()).toMatchObject({ reason })
+    }
+  })
+
+  it('POST /api/ai/insights com resposta válida e lista vazia continua 200', async () => {
+    mockProvider.generateInsights.mockResolvedValue([])
+    const { POST } = await import('@/app/api/ai/insights/route')
+    const res = await POST(makeRequest({ summary: {} }))
+    expect(res.status).toBe(200)
+    expect(await res.json()).toEqual({ insights: [] })
+  })
+
+  it('POST /api/ai/analyze degrada para "Outros" quando a IA falha', async () => {
+    mockProvider.analyzeExpense.mockRejectedValue(new AIProviderError('offline', 'x'))
+    const { POST } = await import('@/app/api/ai/analyze/route')
+    const res = await POST(makeRequest({ text: 'padaria 12' }))
+    expect(res.status).toBe(200)
+    expect(await res.json()).toEqual({ categoria: 'Outros', descricao: 'padaria 12', pagamento: 'crédito', degraded: true })
+  })
+
+  it('erro que não é AIProviderError vira 502 com motivo, sem vazar a mensagem original', async () => {
+    mockProvider.generateInsights.mockRejectedValue(new Error('segredo-interno'))
+    const { POST } = await import('@/app/api/ai/insights/route')
+    const res = await POST(makeRequest({ summary: {} }))
+    expect(res.status).toBe(502)
+    expect(JSON.stringify(await res.json())).not.toContain('segredo-interno')
   })
 
   it('POST /api/ai/analyze delega pro provider', async () => {

@@ -1,10 +1,12 @@
 'use client'
 import type { InsightsStatus } from '@/hooks/useInsights'
+import { messageForReason } from '@/lib/aiMessages'
 
 interface Props {
   status: InsightsStatus
   hasTransactions: boolean
   onRetry: () => void
+  reason?: string
 }
 
 function Retry({ message, onRetry }: { message: string; onRetry: () => void }) {
@@ -22,17 +24,17 @@ function Retry({ message, onRetry }: { message: string; onRetry: () => void }) {
   )
 }
 
-export function InsightsState({ status, hasTransactions, onRetry }: Props) {
+export function InsightsState({ status, hasTransactions, onRetry, reason }: Props) {
   if (status === 'ready' || status === 'loading') return null
 
   if (!hasTransactions) {
     return <p className="text-sm text-muted-foreground">Adicione transações para gerar insights.</p>
   }
 
-  if (status === 'error') return <Retry message="A IA não está disponível agora." onRetry={onRetry} />
+  if (status === 'error') return <Retry message={messageForReason(reason)} onRetry={onRetry} />
 
-  // Os providers de IA devolvem lista vazia quando falham: vazio e erro são indistinguíveis aqui.
-  if (status === 'empty') return <Retry message="A IA não retornou insights desta vez." onRetry={onRetry} />
+  // Falha da IA chega como 'error'; 'empty' significa que a IA respondeu, sem itens.
+  if (status === 'empty') return <p className="text-sm text-muted-foreground">Nenhum insight para este período.</p>
 
   // idle com transações: a geração começa em seguida
   return <p className="text-sm text-muted-foreground">Preparando insights…</p>

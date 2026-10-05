@@ -11,6 +11,10 @@ Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/).
 ### Alterado
 - Código-fonte movido para `src/` (`app`, `components`, `hooks`, `lib`, `services`, `types`); a raiz do repositório fica só com configuração, documentação e testes. Screenshots do README passam de `public/` para `docs/`.
 - Favicon e ícones do PWA próprios (gráfico em alta em azul-acinzentado, o mesmo traço do logo do cabeçalho), no lugar do ícone padrão do Next.js. Gerados por `npm run icons`; o manifest passa a incluir PNG de 192 e 512 px.
+- Falhas da IA deixam de ser engolidas: as rotas `/api/ai/*` devolvem 503, 504 ou 502 com o motivo (`missing_key`, `offline`, `timeout`, `http`, `invalid_response`) e a tela de insights mostra a causa. Sem IA, a análise de despesa (voz e formulário) degrada para a categoria "Outros".
+
+### Corrigido
+- Insights vazios e IA indisponível deixam de se confundir: os providers (Groq e Ollama) não devolvem mais lista vazia quando falham.
 
 ### Removido
 - README em inglês e a pasta `uploads/` (o OCR usa o diretório temporário do sistema).

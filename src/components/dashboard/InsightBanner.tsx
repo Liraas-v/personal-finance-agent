@@ -6,7 +6,7 @@ import { InsightsState } from '@/components/insights/InsightsState'
 import { motion, AnimatePresence } from 'framer-motion'
 
 export function InsightBanner() {
-  const { insights, generate, loading, status } = useInsights()
+  const { insights, generate, loading, status, reason } = useInsights()
   const hasTransactions = useFinanceStore((s) => s.transactions.length > 0)
   const [current, setCurrent] = useState(0)
 
@@ -41,7 +41,7 @@ export function InsightBanner() {
             {insights[current].texto}
           </motion.p>
         ) : (
-          <InsightsState status={status} hasTransactions={hasTransactions} onRetry={generate} />
+          <InsightsState status={status} hasTransactions={hasTransactions} onRetry={generate} reason={reason} />
         )}
       </AnimatePresence>
     </section>

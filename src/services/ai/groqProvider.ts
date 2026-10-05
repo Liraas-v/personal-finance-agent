@@ -1,5 +1,7 @@
 import type { TransactionSummary, ParsedTransaction } from '@/types'
 import type { AIProvider } from './types'
+import { AIProviderError, toAIProviderError } from './errors'
+import { parseExpense, parseInsights } from './parse'
 
 const GROQ_URL = 'https://api.groq.com/openai/v1/chat/completions'
 // llama-3.1-8b-instant e llama-3.3-70b-versatile foram desativados pela Groq em
@@ -10,25 +12,29 @@ const GROQ_MODEL = 'openai/gpt-oss-20b'
 
 async function groqComplete(prompt: string, jsonMode = false): Promise<string> {
   const apiKey = process.env.GROQ_API_KEY
-  if (!apiKey) throw new Error('GROQ_API_KEY não configurada')
+  if (!apiKey) throw new AIProviderError('missing_key', 'GROQ_API_KEY não configurada')
 
-  const res = await fetch(GROQ_URL, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${apiKey}`,
-    },
-    body: JSON.stringify({
-      model: GROQ_MODEL,
-      messages: [{ role: 'user', content: prompt }],
-      ...(jsonMode ? { response_format: { type: 'json_object' } } : {}),
-    }),
-    signal: AbortSignal.timeout(20_000),
-  })
+  try {
+    const res = await fetch(GROQ_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify({
+        model: GROQ_MODEL,
+        messages: [{ role: 'user', content: prompt }],
+        ...(jsonMode ? { response_format: { type: 'json_object' } } : {}),
+      }),
+      signal: AbortSignal.timeout(20_000),
+    })
 
-  if (!res.ok) throw new Error(`Groq HTTP ${res.status}`)
-  const data = await res.json()
-  return data.choices?.[0]?.message?.content ?? ''
+    if (!res.ok) throw new AIProviderError('http', `Groq HTTP ${res.status}`, res.status)
+    const data = await res.json()
+    return data.choices?.[0]?.message?.content ?? ''
+  } catch (e) {
+    throw toAIProviderError(e)
+  }
 }
 
 export class GroqProvider implements AIProvider {
@@ -41,12 +47,7 @@ export class GroqProvider implements AIProvider {
 Categorias válidas: Alimentação, Transporte, Saúde, Assinaturas, Compras, Moradia, Educação, Lazer, Outros.
 Formas de pagamento: crédito, débito, pix, dinheiro, parcelado.
 Texto: "${text}"`
-    try {
-      const raw = await groqComplete(prompt, true)
-      return JSON.parse(raw)
-    } catch {
-      return { categoria: 'Outros', descricao: text, pagamento: 'crédito' }
-    }
+    return parseExpense(await groqComplete(prompt, true))
   }
 
   async generateInsights(summary: TransactionSummary): Promise<string[]> {
@@ -54,13 +55,7 @@ Texto: "${text}"`
 Dados: ${JSON.stringify(summary, null, 2)}
 Use os valores reais. Seja direto e específico.
 Retorne APENAS um JSON no formato {"insights": ["insight 1", "insight 2"]}`
-    try {
-      const raw = await groqComplete(prompt, true)
-      const parsed = JSON.parse(raw)
-      return Array.isArray(parsed) ? parsed : parsed.insights ?? []
-    } catch {
-      return []
-    }
+    return parseInsights(await groqComplete(prompt, true))
   }
 
   async status(): Promise<{ online: boolean; model: string; loaded?: boolean }> {

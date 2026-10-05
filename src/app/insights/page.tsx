@@ -8,7 +8,7 @@ import { useInsights } from '@/hooks/useInsights'
 import { useFinanceStore } from '@/lib/store'
 
 export default function InsightsPage() {
-  const { insights, loading, status, generate } = useInsights()
+  const { insights, loading, status, reason, generate } = useInsights()
   const hasTransactions = useFinanceStore((s) => s.transactions.length > 0)
 
   // As transações chegam de forma assíncrona: gerar só quando existirem (e de novo se passarem a existir).
@@ -48,7 +48,7 @@ export default function InsightsPage() {
         <div className="py-16 text-center">
           <Lightbulb size={32} className="mx-auto mb-3 text-muted-foreground opacity-30" />
           <div className="flex justify-center">
-            <InsightsState status={status} hasTransactions={hasTransactions} onRetry={generate} />
+            <InsightsState status={status} hasTransactions={hasTransactions} onRetry={generate} reason={reason} />
           </div>
         </div>
       )}
