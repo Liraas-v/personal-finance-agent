@@ -44,4 +44,55 @@ describe('GroqProvider', () => {
 
     expect(status.model).toBe('openai/gpt-oss-20b')
   })
+
+  describe('falhas tipadas', () => {
+    const resumo = { periodo: { from: 'a', to: 'b' }, totalGastos: 1, totalReceitas: 2, saldo: 1, porCategoria: {}, moeda: 'BRL' }
+    const insights = async () => {
+      const { GroqProvider } = await import('@/services/ai/groqProvider')
+      return new GroqProvider().generateInsights(resumo as never)
+    }
+    const resposta = (content: string) => ({ ok: true, json: async () => ({ choices: [{ message: { content } }] }) })
+
+    it('sem chave: "missing_key" e nenhuma chamada de rede', async () => {
+      delete process.env.GROQ_API_KEY
+      await expect(insights()).rejects.toMatchObject({ name: 'AIProviderError', reason: 'missing_key' })
+      expect(fetchMock).not.toHaveBeenCalled()
+    })
+
+    it('HTTP não ok: "http" com o status', async () => {
+      fetchMock.mockResolvedValue({ ok: false, status: 429, json: async () => ({}) })
+      await expect(insights()).rejects.toMatchObject({ reason: 'http', status: 429 })
+    })
+
+    it('tempo esgotado: "timeout"', async () => {
+      fetchMock.mockRejectedValue(Object.assign(new Error('t'), { name: 'TimeoutError' }))
+      await expect(insights()).rejects.toMatchObject({ reason: 'timeout' })
+    })
+
+    it('rede indisponível: "offline"', async () => {
+      fetchMock.mockRejectedValue(new TypeError('fetch failed'))
+      await expect(insights()).rejects.toMatchObject({ reason: 'offline' })
+    })
+
+    it('corpo que não é JSON: "invalid_response"', async () => {
+      fetchMock.mockResolvedValue(resposta('isto não é json'))
+      await expect(insights()).rejects.toMatchObject({ reason: 'invalid_response' })
+    })
+
+    it('JSON sem a lista de insights: "invalid_response", e NÃO lista vazia', async () => {
+      fetchMock.mockResolvedValue(resposta('{"outra":1}'))
+      await expect(insights()).rejects.toMatchObject({ reason: 'invalid_response' })
+    })
+
+    it('resposta válida com lista vazia continua sendo lista vazia (a IA respondeu)', async () => {
+      fetchMock.mockResolvedValue(resposta('{"insights":[]}'))
+      await expect(insights()).resolves.toEqual([])
+    })
+
+    it('analyzeExpense também lança em vez de devolver o fallback', async () => {
+      fetchMock.mockResolvedValue({ ok: false, status: 500, json: async () => ({}) })
+      const { GroqProvider } = await import('@/services/ai/groqProvider')
+      await expect(new GroqProvider().analyzeExpense('x 10')).rejects.toMatchObject({ reason: 'http' })
+    })
+  })
 })
