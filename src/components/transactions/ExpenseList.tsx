@@ -1,6 +1,6 @@
 'use client'
 import { useState } from 'react'
-import { Trash2, Mic, PenLine, ScanLine, Pencil } from 'lucide-react'
+import { Trash2, Mic, PenLine, ScanLine, Pencil, Layers } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useTransactions } from '@/hooks/useTransactions'
 import { useFinanceStore } from '@/lib/store'
@@ -8,6 +8,7 @@ import { formatCurrency } from '@/lib/currency'
 import { formatDateBR } from '@/lib/dates'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { ExpenseForm } from './ExpenseForm'
+import { InstallmentGroupDialog } from './InstallmentGroupDialog'
 import type { Transaction } from '@/types'
 
 const ORIGEM_ICON = {
@@ -20,11 +21,13 @@ function TransactionRow({
   t,
   onDelete,
   onEdit,
+  onGroup,
   moeda,
 }: {
   t: Transaction
   onDelete: () => void
   onEdit: () => void
+  onGroup: () => void
   moeda: string
 }) {
   return (
@@ -55,6 +58,16 @@ function TransactionRow({
       >
         {t.tipo === 'gasto' ? '−' : '+'}{formatCurrency(t.valor, moeda)}
       </span>
+      {t.grupoParcelas && (
+        <button
+          onClick={onGroup}
+          aria-label={`Gerenciar parcelas de ${t.descricao}`}
+          className="inline-flex items-center gap-1 opacity-0 group-hover:opacity-100 focus-visible:opacity-100 [@media(hover:none)]:opacity-100 transition-opacity rounded-md text-xs text-muted-foreground hover:text-primary p-1"
+        >
+          <Layers size={14} />
+          Parcelas
+        </button>
+      )}
       <button
         onClick={onEdit}
         aria-label={`Editar ${t.descricao}`}
@@ -78,6 +91,7 @@ export function ExpenseList() {
   const moeda = useFinanceStore((s) => s.config?.moeda ?? 'BRL')
   const [search, setSearch] = useState('')
   const [editing, setEditing] = useState<Transaction | null>(null)
+  const [grouping, setGrouping] = useState<Transaction | null>(null)
 
   const filtered = transactions.filter(
     (t) =>
@@ -107,11 +121,14 @@ export function ExpenseList() {
               t={t}
               onDelete={() => remove(t.id)}
               onEdit={() => setEditing(t)}
+              onGroup={() => setGrouping(t)}
               moeda={moeda}
             />
           ))}
         </AnimatePresence>
       )}
+
+      <InstallmentGroupDialog transaction={grouping} onClose={() => setGrouping(null)} />
 
       <Dialog open={editing !== null} onOpenChange={(open) => !open && setEditing(null)}>
         <DialogContent className="bg-card border-border">
