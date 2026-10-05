@@ -7,6 +7,7 @@ export interface CreateTransactionInput {
   categoria: string
   pagamento: FormaPagamento
   parcelas?: number
+  grupoParcelas?: string
   data: string
   origem: OrigemTransacao
 }

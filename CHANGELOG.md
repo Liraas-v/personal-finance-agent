@@ -7,6 +7,7 @@ Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/).
 ### Adicionado
 - Compras parceladas: ao escolher "parcelado" o formulário pede o número de parcelas e a data da 1ª, mostra a prévia (ex.: "12x de R$ 375,00") e lança uma parcela por mês ("Nike (3/12)"). O valor informado é o total; o centavo de arredondamento fica na última parcela e dias 29 a 31 caem no último dia dos meses curtos. A voz também parcela ("nike 4500 em 12x").
 - Lançamento em lote com um único aviso, que para com segurança se alguma parcela falhar.
+- Editar e excluir todas as parcelas de uma compra: as parcelas passam a ter um identificador de grupo (`grupoParcelas`), e a lista mostra o botão "Parcelas" nas compras parceladas a partir de agora. O diálogo lista as parcelas e permite editar todas (novo total, número de parcelas, data da 1ª e descrição, com rateio de soma exata), excluir todas ou excluir só as futuras. Falha no meio de uma operação em grupo informa quantas parcelas foram afetadas. A exportação CSV ganha a coluna `grupo_parcelas`.
 - Testes E2E com Playwright (11 testes em 6 fluxos: lançar gasto, parcelar, metas, tema, chat/insights e navegação mobile) rodando em um job próprio do CI, com relógio fixo e IA simulada.
 
 ### Alterado

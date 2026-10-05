@@ -76,6 +76,23 @@ describe('ExpenseForm — pagamento parcelado', () => {
     expect(lote[11]).toMatchObject({ descricao: 'Nike (12/12)', data: '2027-09-05' })
   })
 
+  it('as parcelas do lote levam o mesmo grupo e dois envios geram grupos diferentes', async () => {
+    render(<ExpenseForm />)
+    preencher({ parcelas: '3' })
+    fireEvent.click(screen.getByRole('button', { name: 'Adicionar' }))
+    await waitFor(() => expect(createMany).toHaveBeenCalledTimes(1))
+    const lote1 = createMany.mock.calls[0][0]
+    const grupo1 = lote1[0].grupoParcelas
+    expect(grupo1).toBeTruthy()
+    expect(lote1.every((i: { grupoParcelas: string }) => i.grupoParcelas === grupo1)).toBe(true)
+
+    await waitFor(() => expect(screen.getByLabelText('Descrição')).toHaveValue(''))
+    preencher({ parcelas: '3' })
+    fireEvent.click(screen.getByRole('button', { name: 'Adicionar' }))
+    await waitFor(() => expect(createMany).toHaveBeenCalledTimes(2))
+    expect(createMany.mock.calls[1][0][0].grupoParcelas).not.toBe(grupo1)
+  })
+
   it('limpa descrição e valor depois de lançar', async () => {
     render(<ExpenseForm />)
     preencher({ parcelas: '3' })

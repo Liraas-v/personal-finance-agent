@@ -46,4 +46,18 @@ describe('buildTransactionInputs', () => {
     const out = montar(parsed({ valor: 100, parcelas: 3 }))
     expect(out.map((i) => i.valor)).toEqual([33.33, 33.33, 33.34])
   })
+
+  it('as parcelas da mesma compra saem com o mesmo grupo, e compras diferentes com grupos diferentes', () => {
+    const a = montar(parsed({ parcelas: 12 }))
+    const b = montar(parsed({ parcelas: 12 }))
+    const grupo = a[0].grupoParcelas
+    expect(grupo).toBeTruthy()
+    expect(a.every((i) => i.grupoParcelas === grupo)).toBe(true)
+    expect(b[0].grupoParcelas).not.toBe(grupo)
+  })
+
+  it('lançamento sem parcelas não tem grupo', () => {
+    expect(montar(parsed({ parcelas: undefined }))[0].grupoParcelas).toBeUndefined()
+    expect(montar(parsed({ pagamento: 'pix' }))[0].grupoParcelas).toBeUndefined()
+  })
 })

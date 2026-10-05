@@ -75,3 +75,21 @@ describe('splitInstallments — descrição e validação', () => {
     expect(() => splitInstallments({ total: 0.05, parcelas: 6, primeiraData: '2026-10-05', descricao: 'x' })).toThrow(RangeError)
   })
 })
+
+describe('splitInstallments — grupo', () => {
+  it('com grupoParcelas, todas as parcelas saem com o mesmo id', () => {
+    const out = splitInstallments({ total: 1200, parcelas: 12, primeiraData: '2026-10-05', descricao: 'Nike', grupoParcelas: 'g1' })
+    expect(out.every((p) => p.grupoParcelas === 'g1')).toBe(true)
+  })
+
+  it('sem o parâmetro, o campo não existe nos itens', () => {
+    const out = splitInstallments({ total: 1200, parcelas: 12, primeiraData: '2026-10-05', descricao: 'Nike' })
+    expect(out.every((p) => !('grupoParcelas' in p))).toBe(true)
+  })
+
+  it('uma parcela só não recebe grupo', () => {
+    const out = splitInstallments({ total: 100, parcelas: 1, primeiraData: '2026-10-05', descricao: 'Nike', grupoParcelas: 'g1' })
+    expect(out).toHaveLength(1)
+    expect('grupoParcelas' in out[0]).toBe(false)
+  })
+})

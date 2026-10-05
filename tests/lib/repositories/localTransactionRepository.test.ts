@@ -63,4 +63,13 @@ describe('LocalTransactionRepository', () => {
     await repo.clear()
     expect(await repo.list()).toEqual([])
   })
+
+  it('persiste grupoParcelas e devolve o campo na leitura', async () => {
+    const created = await repo.create({
+      tipo: 'gasto', descricao: 'Nike (1/2)', valor: 50, categoria: 'Compras', pagamento: 'parcelado',
+      parcelas: 2, grupoParcelas: 'g-teste', data: '2026-10-05', origem: 'manual',
+    })
+    const lido = (await repo.list()).find((t) => t.id === created.id)
+    expect(lido?.grupoParcelas).toBe('g-teste')
+  })
 })
