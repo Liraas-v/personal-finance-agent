@@ -10,7 +10,7 @@ export const INSIGHTS_SIMULADOS = [
 ]
 
 export const test = base.extend<{ app: Page }>({
-  app: async ({ page }, use) => {
+  app: async ({ page }, entregar) => {
     await page.clock.install({ time: AGORA })
     // IA sempre simulada: nenhum teste depende de chave, rede ou Ollama
     await page.route('**/api/ai/insights', (r) => r.fulfill({ json: { insights: INSIGHTS_SIMULADOS } }))
@@ -18,7 +18,7 @@ export const test = base.extend<{ app: Page }>({
     await page.route('**/api/ai/analyze', (r) =>
       r.fulfill({ json: { categoria: 'Outros', descricao: 'x', pagamento: 'crédito', degraded: true } }),
     )
-    await use(page)
+    await entregar(page)
   },
 })
 
