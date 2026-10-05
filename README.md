@@ -101,6 +101,7 @@ npm run dev
 | `npm run lint` | ESLint |
 | `npm run typecheck` | Verificação de tipos (`tsc --noEmit`) |
 | `npm test` / `npm run test:run` | Testes (modo watch / uma execução) |
+| `npm run test:e2e` | Testes end-to-end com Playwright (veja o `CONTRIBUTING.md`) |
 | `npm run screenshots` | Captura screenshots das telas (veja `scripts/capture-screenshots.mjs`) |
 | `npm run icons` | Regenera o favicon e os ícones do PWA (`scripts/generate-icons.mjs`) |
 
@@ -127,7 +128,7 @@ data/           dados locais do modo self-hosted (ignorados pelo Git)
 npm run test:run
 ```
 
-A suíte cobre funções puras, repositórios, `AIProvider`, rotas de API e componentes. Dois testes protegem o design: um bloqueia cores hardcoded e fora do padrão em `src/app/` e `src/components/`, e outro valida o contraste WCAG dos dois temas lendo o próprio CSS. O CI roda lint, typecheck, testes e build a cada pull request.
+A suíte cobre funções puras, repositórios, `AIProvider`, rotas de API e componentes. Dois testes protegem o design: um bloqueia cores hardcoded e fora do padrão em `src/app/` e `src/components/`, e outro valida o contraste WCAG dos dois temas lendo o próprio CSS. O CI roda lint, typecheck, testes e build a cada pull request, e um job separado roda os testes end-to-end (`npm run test:e2e`, Playwright) cobrindo os fluxos principais.
 
 ## API
 
@@ -152,10 +153,10 @@ A suíte cobre funções puras, repositórios, `AIProvider`, rotas de API e comp
 - [x] CI e documentação
 - [x] Reorganização de UX por tela (metas, transações, chat, insights, mobile)
 - [x] Compras parceladas em lançamentos mensais ([#22](https://github.com/Liraas-v/personal-finance-agent/pull/22))
-- [ ] Testes end-to-end no CI ([#23](https://github.com/Liraas-v/personal-finance-agent/issues/23))
+- [x] Testes end-to-end no CI ([#23](https://github.com/Liraas-v/personal-finance-agent/issues/23))
 - [ ] Editar e excluir todas as parcelas de uma compra ([#24](https://github.com/Liraas-v/personal-finance-agent/issues/24))
 - [ ] Categorias personalizadas ([#25](https://github.com/Liraas-v/personal-finance-agent/issues/25))
-- [ ] Erros da IA tipados, distinguindo falha de resultado vazio ([#26](https://github.com/Liraas-v/personal-finance-agent/issues/26))
+- [x] Erros da IA tipados, distinguindo falha de resultado vazio ([#26](https://github.com/Liraas-v/personal-finance-agent/issues/26))
 - [ ] Primeira release publicada ([#28](https://github.com/Liraas-v/personal-finance-agent/issues/28))
 
 ## Limitações conhecidas

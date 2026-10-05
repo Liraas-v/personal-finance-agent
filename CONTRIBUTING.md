@@ -22,7 +22,21 @@ npm run test:run
 npm run build
 ```
 
-O CI roda os mesmos comandos. Mudanças de lógica devem vir com teste; mudanças visuais, conferidas nos temas claro e escuro.
+O CI roda os mesmos comandos, mais os testes E2E. Mudanças de lógica devem vir com teste; mudanças visuais, conferidas nos temas claro e escuro.
+
+## Testes E2E
+
+Os fluxos principais (lançar gasto, parcelar, metas, tema, chat/insights e navegação mobile) rodam no navegador com [Playwright](https://playwright.dev) contra o build de produção em modo demo:
+
+```bash
+npm run test:e2e        # builda, sobe o servidor na porta 3200 e roda tudo
+npm run test:e2e:ui     # modo interativo, bom para depurar
+```
+
+- Sem baixar o Chromium: `PW_CHANNEL=chrome npm run test:e2e` usa o Chrome instalado. Na primeira vez em outra máquina, `npx playwright install chromium`.
+- Os testes são determinísticos: o relógio é fixo em 05/10/2026 e as rotas `/api/ai/*` são interceptadas (`e2e/fixtures.ts`). Nenhum teste usa chave real, rede ou Ollama.
+- Quando um teste falha, o trace fica em `test-results/`; abra com `npx playwright show-trace <arquivo>`. No CI, o relatório sobe como artefato.
+- Fluxo novo de tela entra com um spec em `e2e/`.
 
 ## Convenções
 
