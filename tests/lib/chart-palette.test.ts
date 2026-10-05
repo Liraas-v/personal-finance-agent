@@ -4,7 +4,7 @@ import path from 'path'
 
 // Cores das categorias nos gráficos: cada categoria precisa ser reconhecível sozinha e distinguível das outras,
 // nos dois temas. Antes eram 6 tons do mesmo azul (diferença visual quase nula entre vizinhos).
-const css = readFileSync(path.resolve(__dirname, '../../app/globals.css'), 'utf8')
+const css = readFileSync(path.resolve(__dirname, '../../src/app/globals.css'), 'utf8')
 
 function tokens(re: RegExp): Record<string, string> {
   const body = css.match(re)?.[1] ?? ''
