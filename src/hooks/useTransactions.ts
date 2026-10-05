@@ -6,7 +6,14 @@ import { useFinanceStore } from '@/lib/store'
 import { useShallow } from 'zustand/react/shallow'
 import { getTransactionRepository } from '@/lib/repositories'
 import type { CreateTransactionInput } from '@/lib/repositories/types'
+import type { PlanoDeGrupo } from '@/lib/installmentGroups'
 import type { Transaction } from '@/types'
+
+export interface ResultadoLote {
+  total: number
+  ok: number
+  falhas: number
+}
 
 const repository = getTransactionRepository()
 
@@ -146,6 +153,74 @@ export function useTransactions() {
     [removeTransaction]
   )
 
+  // Operações em grupo (parcelas de uma mesma compra). Cada parcela é independente, então tentam todas e
+  // reportam quantas deram certo. O store só muda DEPOIS de cada chamada ter dado certo, para nunca
+  // divergir do armazenamento (diferente de `create`, que reverte).
+  const finalizarLote = useCallback((r: ResultadoLote, sucesso: string): ResultadoLote => {
+    if (r.total === 0) return r
+    if (r.falhas > 0) {
+      toast.error(`${r.falhas} de ${r.total} parcelas não puderam ser alteradas`)
+    } else {
+      toast.success(sucesso)
+    }
+    return r
+  }, [])
+
+  const removeMany = useCallback(
+    async (ids: string[]): Promise<ResultadoLote> => {
+      const r: ResultadoLote = { total: ids.length, ok: 0, falhas: 0 }
+      for (const id of ids) {
+        try {
+          await repository.remove(id)
+          removeTransaction(id)
+          r.ok++
+        } catch {
+          r.falhas++
+        }
+      }
+      return finalizarLote(r, `${r.ok} parcelas removidas`)
+    },
+    [removeTransaction, finalizarLote]
+  )
+
+  const updateGroup = useCallback(
+    async (plano: PlanoDeGrupo): Promise<ResultadoLote> => {
+      const r: ResultadoLote = {
+        total: plano.atualizar.length + plano.criar.length + plano.remover.length,
+        ok: 0,
+        falhas: 0,
+      }
+      // Remoções por último: se algo falhar no meio, o que se perde é o mínimo.
+      for (const { id, patch } of plano.atualizar) {
+        try {
+          updateTransaction(await repository.update(id, patch))
+          r.ok++
+        } catch {
+          r.falhas++
+        }
+      }
+      for (const input of plano.criar) {
+        try {
+          addTransaction(await repository.create(input))
+          r.ok++
+        } catch {
+          r.falhas++
+        }
+      }
+      for (const id of plano.remover) {
+        try {
+          await repository.remove(id)
+          removeTransaction(id)
+          r.ok++
+        } catch {
+          r.falhas++
+        }
+      }
+      return finalizarLote(r, `${r.ok} parcelas ajustadas`)
+    },
+    [addTransaction, updateTransaction, removeTransaction, finalizarLote]
+  )
+
   const gastos = filteredTransactions.filter((t) => t.tipo === 'gasto')
   const receitas = filteredTransactions.filter((t) => t.tipo === 'receita')
   const totalGastos = gastos.reduce((sum, t) => sum + t.valor, 0)
@@ -169,5 +244,7 @@ export function useTransactions() {
     createMany,
     update,
     remove,
+    removeMany,
+    updateGroup,
   }
 }
