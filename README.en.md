@@ -104,6 +104,7 @@ npm run dev
 | `npm run typecheck` | Type checking (`tsc --noEmit`) |
 | `npm test` / `npm run test:run` | Tests (watch mode / single run) |
 | `npm run screenshots` | Captures screenshots of the screens (see `scripts/capture-screenshots.mjs`) |
+| `npm run icons` | Regenerates the favicon and PWA icons (`scripts/generate-icons.mjs`) |
 
 ## Project structure
 
