@@ -20,6 +20,14 @@ export const metadata: Metadata = {
   title: 'Finance Agent',
   description: 'Agente financeiro pessoal local',
   manifest: '/manifest.json',
+  // Arquivos gerados por scripts/generate-icons.mjs (npm run icons)
+  icons: {
+    icon: [
+      { url: '/icon.svg', type: 'image/svg+xml' },
+      { url: '/favicon.ico', sizes: '48x48' },
+    ],
+    apple: '/apple-icon.png',
+  },
 }
 
 export const viewport: Viewport = {

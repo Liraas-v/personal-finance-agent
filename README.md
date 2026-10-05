@@ -104,6 +104,7 @@ npm run dev
 | `npm run typecheck` | Verificação de tipos (`tsc --noEmit`) |
 | `npm test` / `npm run test:run` | Testes (modo watch / uma execução) |
 | `npm run screenshots` | Captura screenshots das telas (veja `scripts/capture-screenshots.mjs`) |
+| `npm run icons` | Regenera o favicon e os ícones do PWA (`scripts/generate-icons.mjs`) |
 
 ## Estrutura do projeto
 

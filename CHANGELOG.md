@@ -4,6 +4,9 @@ Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/).
 
 ## [Unreleased]
 
+### Alterado
+- Favicon e ícones do PWA próprios (gráfico em alta em azul-acinzentado, o mesmo traço do logo do cabeçalho), no lugar do ícone padrão do Next.js. Gerados por `npm run icons`; o manifest passa a incluir PNG de 192 e 512 px.
+
 ## [0.2.0] - 2026-10-04
 
 Primeira versão publicada: redesign visual, UX por tela e infraestrutura do repositório.
