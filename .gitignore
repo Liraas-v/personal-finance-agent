@@ -64,3 +64,6 @@ HANDOFF.md
 
 # screenshots temporários de verificação visual
 /.tmp/
+
+# modelos de idioma do Tesseract (o OCR baixa e guarda em cache na pasta onde roda)
+*.traineddata
