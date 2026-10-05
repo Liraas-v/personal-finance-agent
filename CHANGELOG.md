@@ -4,6 +4,10 @@ Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/).
 
 ## [Unreleased]
 
+### Adicionado
+- Compras parceladas: ao escolher "parcelado" o formulário pede o número de parcelas e a data da 1ª, mostra a prévia (ex.: "12x de R$ 375,00") e lança uma parcela por mês ("Nike (3/12)"). O valor informado é o total; o centavo de arredondamento fica na última parcela e dias 29 a 31 caem no último dia dos meses curtos. A voz também parcela ("nike 4500 em 12x").
+- Lançamento em lote com um único aviso, que para com segurança se alguma parcela falhar.
+
 ### Alterado
 - Código-fonte movido para `src/` (`app`, `components`, `hooks`, `lib`, `services`, `types`); a raiz do repositório fica só com configuração, documentação e testes. Screenshots do README passam de `public/` para `docs/`.
 - Favicon e ícones do PWA próprios (gráfico em alta em azul-acinzentado, o mesmo traço do logo do cabeçalho), no lugar do ícone padrão do Next.js. Gerados por `npm run icons`; o manifest passa a incluir PNG de 192 e 512 px.

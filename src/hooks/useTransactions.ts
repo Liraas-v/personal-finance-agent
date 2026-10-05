@@ -6,6 +6,7 @@ import { useFinanceStore } from '@/lib/store'
 import { useShallow } from 'zustand/react/shallow'
 import { getTransactionRepository } from '@/lib/repositories'
 import type { CreateTransactionInput } from '@/lib/repositories/types'
+import type { Transaction } from '@/types'
 
 const repository = getTransactionRepository()
 
@@ -82,6 +83,37 @@ export function useTransactions() {
     [addTransaction, removeTransaction, checkCategoryLimit]
   )
 
+  // Lançamentos em lote (compra parcelada): salva em sequência, com um único aviso no final em vez de
+  // um por parcela. Se alguma falhar, para e mantém as já salvas, avisando quantas entraram.
+  const createMany = useCallback(
+    async (inputs: CreateTransactionInput[]): Promise<Transaction[]> => {
+      const saved: Transaction[] = []
+      const mesAtual = new Date().toISOString().slice(0, 7)
+
+      for (const input of inputs) {
+        // O aviso de limite considera só o mês corrente: parcelas futuras ainda não pesam nele.
+        if (input.tipo === 'gasto' && input.data.startsWith(mesAtual)) {
+          checkCategoryLimit(input.categoria, input.valor)
+        }
+        try {
+          const item = await repository.create(input)
+          addTransaction(item)
+          saved.push(item)
+        } catch {
+          toast.error(`Erro ao salvar: só ${saved.length} de ${inputs.length} parcelas foram registradas`)
+          return saved
+        }
+      }
+
+      if (saved.length > 0) {
+        const total = saved.reduce((sum, t) => sum + t.valor, 0)
+        toast.success(`${saved.length} parcelas registradas (total R$ ${total.toFixed(2)})`)
+      }
+      return saved
+    },
+    [addTransaction, checkCategoryLimit]
+  )
+
   const update = useCallback(
     async (id: string, patch: Partial<CreateTransactionInput>) => {
       const previous = transactions.find((t) => t.id === id)
@@ -134,6 +166,7 @@ export function useTransactions() {
     saldo,
     porCategoria,
     create,
+    createMany,
     update,
     remove,
   }
