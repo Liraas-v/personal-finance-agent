@@ -17,7 +17,7 @@ export function downloadBlob(blob: Blob, filename: string) {
 }
 
 export function exportCSV(transactions: Transaction[], filename: string) {
-  const header = 'id,data,descricao,categoria,valor,tipo,pagamento,parcelas,origem'
+  const header = 'id,data,descricao,categoria,valor,tipo,pagamento,parcelas,origem,grupo_parcelas'
   const rows = transactions.map((t) =>
     [
       t.id,
@@ -29,6 +29,7 @@ export function exportCSV(transactions: Transaction[], filename: string) {
       t.pagamento,
       t.parcelas ?? '',
       t.origem,
+      t.grupoParcelas ?? '',
     ].join(',')
   )
   const csv = [header, ...rows].join('\n')
