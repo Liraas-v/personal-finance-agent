@@ -23,7 +23,8 @@ export const metadata: Metadata = {
   // Arquivos gerados por scripts/generate-icons.mjs (npm run icons)
   icons: {
     icon: [
-      { url: '/icon.svg', type: 'image/svg+xml' },
+      // sizes "any" faz o Chrome preferir o SVG (que acompanha o tema do sistema) ao .ico estático
+      { url: '/icon.svg', type: 'image/svg+xml', sizes: 'any' },
       { url: '/favicon.ico', sizes: '48x48' },
     ],
     apple: '/apple-icon.png',

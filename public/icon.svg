@@ -1,6 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <rect width="32" height="32" rx="7" fill="#4a6785"/>
-  <g transform="translate(4 4)" fill="none" stroke="#ffffff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+  <style>
+    .bg { fill: #4a6785 }
+    .fg { stroke: #ffffff }
+    @media (prefers-color-scheme: dark) { .bg { fill: #8fa8c2 } .fg { stroke: #0f1114 } }
+  </style>
+  <rect class="bg" width="32" height="32" rx="7"/>
+  <g class="fg" transform="translate(4 4)" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
     <path d="M16 7h6v6"/>
     <path d="m22 7-8.5 8.5-5-5L2 17"/>
   </g>
